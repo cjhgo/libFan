@@ -1,0 +1,37 @@
+﻿<!doctype html>
+<html><head><title>书迷：程序设定</title>
+<meta http-equiv="Content-Type" content="text/HTML; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="theme.css">
+<script src="zepto.js"></script><script src="options.js"></script></head><body>
+
+<header><img id="logo" src="logo.png">
+	<nav>
+		<a href="#interface">界面</a>
+		<a href="#search">检索</a>
+		<a href="#notify">还书提醒</a>
+		<a href="#opac">图书馆配置</a>
+	</nav>
+</header>
+
+<article>
+<h2><a name="interface"></a>界面</h2>
+<div class="contents">
+	<p><input type="checkbox" id="show-top-search"><label for="show-top-search">在首页显示热门关键词</label></p>
+</div>
+<h2><a name="search"></a>搜索</h2>
+<div class="contents">
+  <p><label for="page-limit">检索结果数：</label><input type="number" id="page-limit" value="10" min="5" max="20"></p>
+</div>
+<h2><a name="notify"></a>还书提醒</h2>
+<div class="contents">
+  <p><input type="checkbox" id="enable-notify"><label for="enable-notify">每次启动Chrome时检查到期图书</label></p>
+  <p><label for="user-id">用户ID：</label><input id="user-id" placeholder="用户ID"><a href="help/index.html#set-notify">如何获取？</a></p>
+</div>
+<h2><a name="opac"></a>图书馆</h2>
+<div class="contents">
+  <p>暂未开放其他高校图书馆的功能。将在后续版本中完成。</p>
+</div>
+</article>
+<footer><button id="save">保存设置</button><button id="close">关闭</button><span id="successful-saved">设置成功保存。</span></footer>
+</body>
+</html>

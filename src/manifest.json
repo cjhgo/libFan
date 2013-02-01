@@ -1,0 +1,36 @@
+﻿{
+  //"update_url":"http://clients2.google.com/service/update2/crx",
+  "name": "书迷",
+  "version": "1.0",
+  "manifest_version": 2,
+  "description": "查看豆瓣、京东、亚马逊、当当网的图书在江苏大学图书馆借阅情况",
+  "content_scripts": [ {
+      "css": [ "inject.css" ],
+      "js": [ "zepto.js" , "inject.js" ],
+      "matches": ["http://book.douban.com/subject/*","http://www.amazon.cn/*","http://product.dangdang.com/*",
+		"http://book.360buy.com/*","http://e.360buy.com/*"],
+      "run_at": "document_end"
+   } ],
+  "options_page": "options.html",
+  "background": {
+    "persistent": false,
+    "scripts": [ "zepto.js", "lib.js" , "background.js"]
+  },
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_title": "书迷",
+    "default_popup": "popup.html"
+  },
+  "icons": {
+    "128": "icon.png",
+    "16": "icon.png",
+    "32": "icon.png",
+    "48": "icon.png"
+  },
+  "permissions": [
+    "tabs",
+    "http://huiwen.ujs.edu.cn/*",
+    "notifications"
+  ],
+  "web_accessible_resources": [ "inject.css" , "lib.js", "icon.png"]
+}

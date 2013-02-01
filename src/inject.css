@@ -1,0 +1,14 @@
+﻿/* 京东样式表 */
+.box_360buy{
+	float: right;
+	width: 448px;
+	border: 1px solid #EED97C;
+	background: #FFFCEB;
+	color: #666;
+	overflow: hidden;
+	margin: 10px 0;
+	padding:10px;
+}
+
+.box_360buy h2{margin-bottom:5px}
+.box_360buy a{color:#BB6E0D;font-size:14px;}
