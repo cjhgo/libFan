@@ -55,7 +55,6 @@
                 }
                 _cover = "#original-main-image";
                 _title = $("#btAsinTitle").text().split(' [')[0].toString();
-                _title = _ISBN = "";                
                 break;
             case 'dangdang':
                 _title = $("h1").text();
