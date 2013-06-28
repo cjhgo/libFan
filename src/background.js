@@ -71,17 +71,19 @@ chrome.runtime.onStartup.addListener(function() {
 					}
 				}
 				
-				//弹出消息
-				var msg = webkitNotifications.createNotification("icon.png", "书迷提醒", text)
-				msg.addEventListener('click', function() {
-				    msg.cancel();
-				    window.open('help/index.html');
-				})
-				msg.show();
-
 				//显示提醒数目
-				if(notifications.length) chrome.browserAction.setBadgeText({
-					text: notifications.length.toString()});
+				if(notifications.length){
+					chrome.browserAction.setBadgeText({
+						text: notifications.length.toString()});
+
+					//弹出消息
+					var msg = webkitNotifications.createNotification("icon.png", "书迷提醒", text)
+					msg.addEventListener('click', function() {
+					    msg.cancel();
+					    window.open('help/index.html');
+					})
+					msg.show();
+				}
 
 				//TODO:这里有一些问题
 				/*

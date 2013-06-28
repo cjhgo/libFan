@@ -76,9 +76,9 @@ $(function() {
 					}
 					var tip = $("#tooltip");
 					resultList.mouseout(function() {
-						tip.animate({opacity:0}, 200);
+						tip.hide(200);
 					}).find("li a").mouseover(function() {
-						tip.html($(this).data("detail")).show().animate({opacity:0.9});						
+						tip.html($(this).data("detail")).show(200);
 					});
 				} else {
 					//NO results found
