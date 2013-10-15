@@ -1,4 +1,5 @@
-﻿﻿#书迷
+书迷 | libFan
+=============
 
 一个为图书馆爱好者设计的Chrome扩展程序，可以更方便地检索图书馆资源。
 基于[lmmsoft/njust-library-chrome-plugin](https://github.com/lmmsoft/njust-library-chrome-plugin)重构。
