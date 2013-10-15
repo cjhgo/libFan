@@ -29,7 +29,7 @@
   },
   "permissions": [
     "tabs",
-    "http://huiwen.ujs.edu.cn/*",
+    "http://*/*",
     "notifications"
   ],
   "web_accessible_resources": [ "inject.css" , "lib.js", "icon.png", "loading.gif"]

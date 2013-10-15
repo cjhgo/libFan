@@ -12,7 +12,7 @@
 
 //初始化应用程序设置
 chrome.runtime.onInstalled.addListener(function() {
-	if(/true/.test(localStorage.installed)) return;
+	if(/^true$/.test(localStorage.installed)) return;
 
 	//初始设置
 	var defaultConfig = {

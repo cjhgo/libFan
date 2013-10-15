@@ -11,6 +11,21 @@
 
 //model静态类
 window.model = {
+	supoorted: [
+		{
+			title: "江苏大学",
+			url: "http://huiwen.ujs.edu.cn:8080/"
+			ver: "4"
+		},{
+			title: "南京大学",
+			url: "http://huiwen.ujs.edu.cn:8080/"
+			ver: "4"
+		},{
+			title: "南京理工大学",
+			url: "",
+			ver: "5" //TODO:支持5的规则
+		}
+	],
 	util: {
 		//检查是否为合法的用户ID
 		isValidId: function(id) {
@@ -19,7 +34,7 @@ window.model = {
 	},
 	//用户信息
 	user: {
-		baseURL: "http://huiwen.ujs.edu.cn:8080/reader/",
+		baseURL: localStorage.opacRoot + "reader/",
 		getRss: function(id, type, callback) {
 			$.ajax({
 				dataType: 'xml',
@@ -31,6 +46,7 @@ window.model = {
 					    }[$1];
 					}),
 				success: function(xml) {
+					console.log(xml);
 				    var dom = $(xml), list = dom.find("item"), items, item,
 				    	result = {title: dom.find("channel > title").text(), list:[]},
 				    	child = function(parent, tag){
@@ -71,7 +87,7 @@ window.model = {
 	},
 	opac: {
 		//
-		baseURL:"http://huiwen.ujs.edu.cn:8080/opac/",
+		baseURL: localStorage.opacRoot + "opac/",
 		//热门检索
 		getTopKeyword: function(callback) {
 			$.ajax({
@@ -106,7 +122,7 @@ window.model = {
 			lang_code=ALL&match_flag=forward&displaypg=20&showmode=list&
 			orderby=DESC&sort=CATA_DATE&onlylendable=yes&displaypg=50
 
-			TODO:更换抓取接口
+			RSS抓取接口(不能显示可借数)
 
 			http://huiwen.ujs.edu.cn:8080/opac/search_rss.php?dept=ALL&
 			isbn=9787563379071&doctype=ALL&lang_code=ALL&match_flag=forward&
@@ -115,7 +131,8 @@ window.model = {
 
 			//预处理参数
 			//preprocess arguments
-			var page = options.page || 0, limit = options.limit || 10; //默认翻页
+			var page = options.page || 0,
+				limit = options.limit || 10; //默认翻页
 			keyword = encodeURIComponent(keyword);
 
 			var url = this.baseURL + "openlink.php?strSearchType=title&strText={$k}&displaypg={$l}&page={$p}"
@@ -148,7 +165,7 @@ window.model = {
             		list = dom.find(".list_books");
             		for(var i=0; i<list.length; i++) {
 						//在limit参数小于20的时候会失效，必须手动退出循环
-            			if(i>limit) break;
+            			if(i > limit) break;
 
             			//馆藏复本、可借复本信息
             			var div = $(list[i]),

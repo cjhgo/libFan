@@ -12,51 +12,52 @@
  * 选项界面的响应
  *
 */
-//加载所有设定值
-var ids = {
-	resultsPerPage: "page-limit",
-	displayTopWords: "show-top-search",
-	enableNotify: "enable-notify",
-	userId: "user-id"
-}, value, e;
-
-function saveSetting() {
-	for(var i in ids) {
-		e = $("#"+ids[i]);
-		if(!e) continue;
-		switch(e.attr("type")){
-			case "checkbox":
-				value = e.prop("checked");
-				break;
-			case "number":
-			case "text":
-			default:
-				value = e.val();
-		}
-		localStorage.setItem(i, value);
-	}
-}
-
-function loadSetting() {
-	for(var i in ids){
-		value = localStorage.getItem(i);
-		e = $("#"+ids[i]);
-		if(!e) continue;
-		switch(e.attr("type")){
-			case "checkbox":
-				if(value=="true"){
-					e.prop("checked", "checked");
-				}
-				break;
-			case "number":
-			case "text":
-			default:
-				e.val(value);
-		}
-	}		
-}
 
 $(function() {
+	//加载所有设定值
+	var ids = {
+		resultsPerPage: "page-limit",
+		displayTopWords: "show-top-search",
+		enableNotify: "enable-notify",
+		userId: "user-id",
+		opacRoot: "opac-root"
+	}, value, e;
+
+	var loadSetting = function(){
+		for(var i in ids){
+			value = localStorage.getItem(i);
+			e = $("#"+ids[i]);
+			if(!e) continue;
+			switch(e.attr("type")){
+				case "checkbox":
+					if(value=="true"){
+						e.prop("checked", "checked");
+					}
+					break;
+				case "number":
+				case "text":
+				default:
+					e.val(value);
+			}
+		}	
+	},
+	saveSetting = function() {
+		for(var i in ids) {
+			e = $("#"+ids[i]);
+			if(!e) continue;
+			switch(e.attr("type")){
+				case "checkbox":
+					value = e.prop("checked");
+					break;
+				case "number":
+				case "text":
+				default:
+					value = e.val();
+			}
+			localStorage.setItem(i, value);
+		}
+	}
+
 	//加载设置到界面
 	loadSetting();
 	//保存
@@ -68,7 +69,11 @@ $(function() {
 		}, 3000);
 	});
 	//关闭
-	$("#close").click(function(){
+	$("#close").click(function() {
 		window.close();
+	});
+	$("#opac-selections > a").on("click", function() {
+		$("#opac-root").val(this.href);
+		return false;
 	});
 })
