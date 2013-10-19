@@ -39,7 +39,7 @@ chrome.runtime.onStartup.addListener(function() {
 	var notifications = [], totalMsgNum = 0, receivedMsgNum = 0;
 
 	//同步提醒
-	if(!JSON.parse(localStorage.enableNotify)) return
+	if(!JSON.parse(localStorage.enableNotify)) return;
 
 	//TODO:在设置界面中设定需要接收的提醒
 	var notifyItems = {
@@ -56,31 +56,35 @@ chrome.runtime.onStartup.addListener(function() {
 			if(result && result.list.length){
 				notifications.push(result);
 			}
-			
+	
 			//是否全部同步完成
 			if(++receivedMsgNum == totalMsgNum) {
-				var notify, text = "您有";
-				while(notify = notifications.pop()) {
-					text += (notify.list.length + "本" + notify.title + "：");
-					for(var j=0; j<notify.list.length; j++){
-						text += (notify.list[j].title + " ");
-						if(text.length > 60) {
-							text += "...";
-							break;
-						}
-					}
-				}
+				var notify, text = "您有", pretty = "<h1>提醒中心</h1>";
+				var notifyCount = notifications.length;
 				
+				localStorage.notifications = JSON.stringify(notifications);
+				while(notify = notifications.pop()) {
+					text += (notify.list.length + "本" + notify.title + "：\n");
+					pretty += ("<section><h2>" + notify.list.length + "本" + notify.title + "</h2><ul>");
+					for(var j=0; j<notify.list.length; j++) {
+						if(text.length < 60) 
+							text += (notify.list[j].title + " \n");
+						pretty += ("<li>" + notify.list[j].title + "</li>");
+					}
+					pretty += ("</ul></section>");
+				}
+
+				localStorage.notificationsHTML = pretty;
+
 				//显示提醒数目
-				if(notifications.length){
-					chrome.browserAction.setBadgeText({
-						text: notifications.length.toString()});
+				if(notifyCount) {
+					chrome.browserAction.setBadgeText({text: notifyCount.toString()});
 
 					//弹出消息
 					var msg = webkitNotifications.createNotification("icon.png", "书迷提醒", text)
 					msg.addEventListener('click', function() {
 					    msg.cancel();
-					    window.open('help/index.html');
+					    window.open('result.html').document.write(pretty);
 					})
 					msg.show();
 				}

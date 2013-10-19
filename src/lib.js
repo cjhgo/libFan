@@ -14,11 +14,11 @@ window.model = {
 	supoorted: [
 		{
 			title: "江苏大学",
-			url: "http://huiwen.ujs.edu.cn:8080/"
+			url: "http://huiwen.ujs.edu.cn:8080/",
 			ver: "4"
 		},{
 			title: "南京大学",
-			url: "http://huiwen.ujs.edu.cn:8080/"
+			url: "http://huiwen.ujs.edu.cn:8080/",
 			ver: "4"
 		},{
 			title: "南京理工大学",
@@ -46,7 +46,6 @@ window.model = {
 					    }[$1];
 					}),
 				success: function(xml) {
-					console.log(xml);
 				    var dom = $(xml), list = dom.find("item"), items, item,
 				    	result = {title: dom.find("channel > title").text(), list:[]},
 				    	child = function(parent, tag){
