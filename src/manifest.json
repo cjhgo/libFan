@@ -1,7 +1,7 @@
 ﻿{
   //"update_url":"http://clients2.google.com/service/update2/crx",
   "name": "书迷",
-  "version": "1.0.1",
+  "version": "1.0.4",
   "manifest_version": 2,
   "description": "查看豆瓣、京东、亚马逊、当当网的图书在江苏大学图书馆借阅情况",
   "content_scripts": [ {
