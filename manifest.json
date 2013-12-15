@@ -6,7 +6,7 @@
   "description": "查看豆瓣、京东、亚马逊、当当网的图书在江苏大学图书馆借阅情况",
   "content_scripts": [ {
       "css": [ "inject.css" ],
-      "js": [ "zepto.js" , "inject.js" ],
+      "js": [ "js/zepto.js" , "js/inject.js" ],
       "matches": ["http://book.douban.com/subject/*","http://www.amazon.cn/*","http://www.amazon.com/*",
         "http://product.dangdang.com/*", "http://item.jd.com/*"],
       "run_at": "document_end"
@@ -14,7 +14,7 @@
   "options_page": "options.html",
   "background": {
     "persistent": false,
-    "scripts": [ "zepto.js", "lib.js" , "background.js"]
+    "scripts": [ "js/zepto.js", "js/lib.js" , "js/background.js"]
   },
   "browser_action": {
     "default_icon": "icon.png",
@@ -32,5 +32,5 @@
     "http://*/*",
     "notifications"
   ],
-  "web_accessible_resources": [ "inject.css" , "lib.js", "icon.png", "loading.gif"]
+  "web_accessible_resources": [ "inject.css" , "js/lib.js", "icon.png", "loading.gif"]
 }

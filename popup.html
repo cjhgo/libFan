@@ -62,7 +62,7 @@ footer a{opacity:0.85;height:21px;display:inline-block;line-height:21px;color:#3
 footer a:hover{opacity:1;}
 em.icon{background:url(icons.png);width:21px;height:21px;display:inline-block;float:left;}
 #icon-help{background-position:-21px}
-</style><script src="zepto.js"></script><script src="dialog.js"></script><script src="lib.js"></script></head><body>
+</style><script src="js/zepto.js"></script><script src="js/dialog.js"></script><script src="js/lib.js"></script></head><body>
 <header><img id="logo" src="logo.png"></header>
 <article>
 <!--表单开始-->
@@ -81,21 +81,7 @@ em.icon{background:url(icons.png);width:21px;height:21px;display:inline-block;fl
 </form>
 <!--表单结束-->
 <!--搜索结果开始-->
-<div id="loading">正在搜索...</div>
-<ul id="search-result">
-<!--
-	<li>
-		<div class="left"><em>0</em>/2<div class="type">中文图书</div></div>
-		<div class="right">
-			<h3>SQL Server 2008从入门到精通</h3><code>K919/L23</code>
-			<span class="author">雷发林著</span><span class="publisher">中国青年出版社 2012</span>
-		</div>
-		<div class="clear"></div>
-	</li>
--->
-</ul>
-<div id="tooltip"></div>
-<nav><a href="#" target="_blank">查看更多</a></nav>
+<div id="loading">正在搜索...</div><ul id="search-result"></ul><div id="tooltip"></div><nav><a href="#" target="_blank">查看更多</a></nav>
 <!--搜索结果结束-->
 </article>
 <footer><a target="_blank" href="options.html"><em class="icon" id="icon-setting"></em>设置</a>
