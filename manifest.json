@@ -5,7 +5,7 @@
   "manifest_version": 2,
   "description": "查看豆瓣、京东、亚马逊、当当网的图书在江苏大学图书馆借阅情况",
   "content_scripts": [ {
-      "css": [ "inject.css" ],
+      "css": [ "css/inject.css" ],
       "js": [ "js/zepto.js" , "js/inject.js" ],
       "matches": ["http://book.douban.com/subject/*","http://www.amazon.cn/*","http://www.amazon.com/*",
         "http://product.dangdang.com/*", "http://item.jd.com/*"],
@@ -32,5 +32,5 @@
     "http://*/*",
     "notifications"
   ],
-  "web_accessible_resources": [ "inject.css" , "js/lib.js", "icon.png", "loading.gif"]
+  "web_accessible_resources": [ "css/inject.css" , "js/lib.js", "css/icon.png", "css/loading.gif"]
 }
