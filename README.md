@@ -37,34 +37,3 @@
 ##待完善
 
 提供对其他公共图书馆OPAC系统的支持。
-
-#libFan
-
-A Chrome Extension that provides easy access to University of Jiangsu OPAC System.
-Based on [lmmsoft/njust-library-chrome-plugin](https://github.com/lmmsoft/njust-library-chrome-plugin).
-
-##Features
-
-> 1.Checks books that are about to expire and shows an notify on startup.
-
-> 2.Add a chart about the book while browsing websites below:
-book.douban.com, 
-
-> 3.Search books in the library by keyword.
-
-##Load the extension from source
-
-Extensions that you download from the Chrome Web Store are packaged up as .crx files, which is great for distribution, but not so great for development. Recognizing this, Chrome gives you a quick way of loading up your working directory for testing. Let's do that now.
-
-> 1.Visit chrome://extensions in your browser (or open up the settings menu by clicking the icon to the far right of the Omnibox > and select *Extensions* under the *Tools* menu to get to the same place).
-
-> 2.Ensure that the Developer Mode checkbox in the top right-hand corner is checked.
-
-> 3.Click Load unpacked extension… to pop up a file-selection dialog.
-
-> 4.Navigate to the directory in which your extension files live, and select it.
-If the extension is valid, it'll be loaded up and active right away! If it's invalid, an error message will be displayed at the top of the page. Correct the error, and try again.
-
-##TODO
-
-Support more public libraries.
