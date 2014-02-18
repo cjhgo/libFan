@@ -1,37 +1,29 @@
-﻿//Chrome Addin for Huiwen OPAC
+﻿/*
+    Chrome Extention for Huiwen OPAC
+*/
 
-//Copyright (c) 2012, lmmsoft@126.com
-//Released under the GPL license
-//http://www.gnu.org/copyleft/gpl.html
+//ChiChou [http://chichou.0ginr.com]
 
-//rewritten by ChiChou [http://chichou.0ginr.com]
-
-(function(){
+(function() {
     "use strict";
     //
     var
         //程序设定
+        //TODO：
         config = {
             school: "ujs",
             library: "江苏大学图书馆",
-            baseUrl: "http://huiwen.ujs.edu.cn:8080/opac/"
+            baseUrl: localStorage.opacRoot + "opac/"
         },
 
         //获得当前页面的域名
-        domain = document.domain.match(/amazon|douban|dangdang|jd/i),
+        domain = (document.domain.match(/amazon|douban|dangdang|jd/i) || null)[0],
 
         //书籍信息
-        book
+        book = getBookInfo();
     ;
 
-    if(typeof domain == null)
-        return false;
-
-    domain = domain[0];
-    book = getBookInfo();
-
-    //不是详细内容页面
-    if(!initUI()) return false;
+    if(!(domain && initUI()) return false;
     getSearchInfo(book.ISBN);
 
     function getBookInfo() {
@@ -58,7 +50,6 @@
                 break;
             case 'dangdang':
                 _title = $("h1").text();
-                //_ISBN  = $(".ws4").parent().html().match(/d+/);
                 _ISBN  = $(".ws4").parent().html().substring(27);
                 _cover = "#largePic";
                 break;
@@ -112,6 +103,7 @@
     function getSearchInfo(ISBN) {
         ISBN = String(ISBN);
         if(!/(\d{9}|\d{13})/.test(ISBN)) return;
+        //TODO:
         var url = config.baseUrl + "openlink.php?strSearchType=isbn&historyCount=1&strText=" + ISBN
          + "&x=0&y=0&doctype=ALL&match_flag=forward&displaypg=20&sort=CATA_DATE&orderby=desc&showmode=list&dept=ALL";
         $.ajax({
@@ -121,12 +113,11 @@
                 if (data.indexOf('本馆没有您检索的馆藏书目') != -1) {
                     //如果是13位的ISBN则尝试重试
                     if(ISBN.length == 13) {
-                        getSearchInfo(ISBN.substring(3,12));
+                        getSearchInfo(ISBN.substring(3, 12));
                     } else {
                         var urlFull = config.baseUrl + "openlink.php?strSearchType=title&historyCount=1&strText=" + 
                             book.title + "&x=16&y=14&doctype=ALL&match_flag=forward&displaypg=20" + 
                             "&sort=CATA_DATE&orderby=desc&showmode=list&dept=ALL";
-
                         $('#isex').html('哎呀，没有找到这本书…… <a href="' + urlFull + '" target="_blank">搜搜类似的书</a>');                        
                     }
                 } else {
@@ -140,7 +131,7 @@
                         tip = '一共' + total + '本，';
 
                     tip += ( remain == 0 ? 
-                        '竟然都被借光了！<br />学霸们太威武啦！' : '还剩' + remain + '本，哈哈，是我的啦！'
+                        '竟然都被借光了！<br />学霸们太威武啦！' : '还剩' + remain + '本~'
                     );
 
                     $('#isex').html(tip);
@@ -152,29 +143,15 @@
 
     //抓取具体图书信息页面
     function loadBookDetail(url) {
-        $.ajax({
-            dataType: "html",
-            url: config.baseUrl + url,
-            success: function (data) {
-                //消除控制台404错误
-                data = data.replace(/(href|src)=\"[\S\s]*?\"/g, "");
-                var table = $(data).find("table").removeAttr("width");
+        $.get(config.baseUrl + url, function (data) {
+            //消除控制台404错误
+            data = data.replace(/(href|src)=\"[\S\s]*?\"/g, "");
+            var table = $(data).find("table").removeAttr("width");
 
-                $('#ujslib').append(table).append('<p><a href="'+config.baseUrl+url+'" target="_blank">到图书馆看看</a></p>');
-                //删除不必要的信息
-                /*
-                $((function(){
-                    var result = [], columns = [2,3,4];
-                    for(var i=0;i<columns.length;i++) {
-                        result.push("#ujslib tr td:nth-child("+columns[i]+")");
-                    }
-                    return result.join();
-                })()).remove(); 
-                */
-                //删除2,3,4列                
-                $("#ujslib tr td:nth-child(2),#ujslib tr td:nth-child(3),#ujslib tr td:nth-child(4)").remove();
-                $("#ujslib table").hide().show(500);
-            }
+            $('#ujslib').append(table).append('<p><a href="'+config.baseUrl+url+'" target="_blank">到图书馆看看</a></p>');
+            //删除不必要的信息           
+            $("#ujslib tr td:nth-child(2),#ujslib tr td:nth-child(3),#ujslib tr td:nth-child(4)").remove();
+            $("#ujslib table").hide().show(500);
         });
     } 
-})()
+})();

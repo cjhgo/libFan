@@ -1,14 +1,19 @@
 ﻿{
   //"update_url":"http://clients2.google.com/service/update2/crx",
   "name": "书迷",
-  "version": "1.0.4",
+  "version": "2.0.0",
   "manifest_version": 2,
   "description": "查看豆瓣、京东、亚马逊、当当网的图书在江苏大学图书馆借阅情况",
   "content_scripts": [ {
       "css": [ "css/inject.css" ],
       "js": [ "js/zepto.js" , "js/inject.js" ],
-      "matches": ["http://book.douban.com/subject/*","http://www.amazon.cn/*","http://www.amazon.com/*",
-        "http://product.dangdang.com/*", "http://item.jd.com/*"],
+      "matches": [
+          "http://book.douban.com/subject/*",
+          "http://www.amazon.cn/*",
+          "http://www.amazon.com/*",
+          "http://product.dangdang.com/*", 
+          "http://item.jd.com/*"          
+      ],
       "run_at": "document_end"
    } ],
   "options_page": "options.html",

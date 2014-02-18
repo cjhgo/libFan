@@ -4,44 +4,47 @@
 <link rel="stylesheet" type="text/css" href="css/theme.css">
 <script src="js/zepto.js"></script><script src="js/options.js"></script></head><body class="panel">
 
-<header><img id="logo" src="css/logo.png">
-	<nav>
-		<a href="#interface">界面</a>
-		<a href="#search">检索</a>
-		<a href="#notify">还书提醒</a>
-		<a href="#opac">图书馆配置</a>
+<header>
+  <div id="logo"><a id="logo-animator" href="http://github.com/chichou/libfan"></a></div>
+	<nav class="tab">
+		<a href="options.html" class="on">系统设置</a>
+		<a href="help.html">帮助</a>
 	</nav>
 </header>
 
-<article>
-<h2><a name="interface"></a>界面</h2>
-<div class="contents">
-	<p><input type="checkbox" id="show-top-search"><label for="show-top-search">在首页显示热门关键词</label></p>
-</div>
-<h2><a name="search"></a>搜索</h2>
-<div class="contents">
-  <p><label for="page-limit">检索结果数：</label><input type="number" id="page-limit" value="10" min="5" max="20"></p>
-</div>
-<h2><a name="notify"></a>还书提醒</h2>
-<div class="contents">
-  <p><input type="checkbox" id="enable-notify"><label for="enable-notify">每次启动Chrome时检查到期图书</label></p>
-  <p><label for="user-id">用户ID：</label><input id="user-id" placeholder="用户ID"><a href="help/index.html#set-notify">如何获取？</a></p>
-</div>
-<h2><a name="opac"></a>图书馆</h2>
-<div class="contents">
-  <p><label for="opac-root">图书馆系统地址：</label></p>
-  <p><textarea id="opac-root" placeholder=""></textarea></p>
-  <p id="opac-selections">
-  	<a href="http://calis2.nju.edu.cn:8080/">南京大学</a>
+<article class="options">
+  <section class="title-bar">
+    <div class="toolbar"><span id="successful-saved">设置成功保存。</span><button id="save"><em class="icon ok"></em>保存设置</button><button id="close"><em class="icon cancel"></em>关闭</button></div>
+    <h1>系统设置</h1>    
+  </section>
+
+  <section>
+    <h2><a name="interface"></a>界面</h2>
+    <p><input type="checkbox" id="show-top-search"><label for="show-top-search">在首页显示热门关键词</label></p>
+  </section>
+  <section>
+    <h2><a name="search"></a>搜索</h2>
+    <p><label for="page-limit">检索结果数：</label><input type="number" id="page-limit" value="10" min="5" max="20"></p>
+  </section>
+  <section>
+    <h2><a name="notify"></a>还书提醒</h2>
+    <p><input type="checkbox" id="enable-notify"><label for="enable-notify">每次启动 Chrome 时检查到期图书</label></p>
+    <p>您还没有验证帐号，请<button id="auth"><em class="icon login"></em>登录</button><input id="user-id" type="hidden"></p>
+  </section>
+  <section>
+    <h2><a name="opac"></a>图书馆</h2>
+    <p><label for="opac-root">图书馆系统地址：</label></p>
+    <p><input id="opac-root" placeholder=""></input></p>
+    <p id="opac-selections">
+    <a href="http://calis2.nju.edu.cn:8080/">南京大学</a>
     <a href="http://huiwen.ujs.edu.cn:8080/">江苏大学</a>    
     <a href="http://211.70.72.102:8080/">江苏科技大学</a>    
     <a href="http://opac.lib.xjtlu.edu.cn/cn/">西交利物浦</a>    
-  	<a href="http://ilib.ciir.edu.cn/">中国劳动关系学院</a>
+    <a href="http://ilib.ciir.edu.cn/">中国劳动关系学院</a>
     <a href="http://210.35.206.99:8080/">江西财经大学</a>
-  	<!-- <a href="http://202.119.83.14:8080/">南京理工大学</a> TODO：此OPAC版本为5，在匹配的规则上有少许变化-->
-  </p>
-</div>
+    <!-- <a href="http://202.119.83.14:8080/">南京理工大学</a> TODO：此OPAC版本为5，在匹配的规则上有少许变化-->
+  </p></section>
 </article>
-<footer><button id="save">保存设置</button><button id="close">关闭</button><span id="successful-saved">设置成功保存。</span></footer>
+
 </body>
 </html>

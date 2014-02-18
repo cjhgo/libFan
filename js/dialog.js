@@ -15,6 +15,8 @@ $(function() {
 		$("#top-keyword").hide();
 	}
 
+	//http://www.bing.com/HPImageArchive.aspx?idx=0&n=1&mkt=zh-CN
+
 	model.opac.getTopKeyword(function(result) {
 		var a, div = $("#top-keyword");
 		for(var i=0; i<result.length; i++) {
@@ -32,14 +34,19 @@ $(function() {
 		$(this).toggleClass("bottom");
 	});
 	
+	var input = $("#keyword").on("click", function() {
+		$(this).select();
+	});
+
 	$("form").submit(function() {
 		if($("form").data("status") == "busy") return false;		
-		var keyword = $("#keyword").val();
+		var keyword = input.val();
 		//check whether keyword is empty
 		if(keyword.length > 0) {
 			//显示loading动画
 			$("form").data("status", "busy");
-			$("header").animate({"margin-top":"-115px"}, 300);
+			$("header").animate({"margin-top":"-105px"}, 300);
+			$("#search").addClass("shim");
 			$("#search-result").empty();
 			$("nav,#top-keyword,footer").hide();
 			$("#loading").show();
@@ -64,16 +71,15 @@ $(function() {
 							).append("/馆藏复本")
 						).addClass("first")
 					);
-					for(i=0; i<data.list.length;i++){
-						item = data.list[i];
+					data.list.forEach(function(item, index, array) {
 						a = $("<a>").attr("href", item.link).attr("target", "_blank").text(item.title).data("detail",
-							"索书号：" + item.serial + "<br>作　者：" + item.author + "<br>出版社：" + item.publisher +
-							"<br>类　别：" + item.type);
+							["索书号：", item.serial, "<br>作　者：", item.author, "<br>出版社：", item.publisher,
+							"<br>类　别：", item.type].join(""));
 						span = $("<span>")./*append("[").*/append($("<em>").text(item.remain).attr("title", "可借复本")
 							).append("/"+item.total/*+"]"*/).attr("title", "馆藏复本");
 						li = $("<li>").append(span).append(a);
 						resultList.append(li);
-					}
+					});
 					var tip = $("#tooltip");
 					resultList.mouseout(function() {
 						tip.hide(200);
@@ -87,10 +93,7 @@ $(function() {
 					$("nav").hide();
 				}				
 			});
-		} else {
-			//
-			
 		}
 		return false;
-	})
+	});
 })

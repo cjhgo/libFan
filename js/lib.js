@@ -89,49 +89,23 @@ window.model = {
         baseURL: localStorage.opacRoot + "opac/",
         //热门检索
         getTopKeyword: function(callback) {
-            $.ajax({
-                dataType: "html",
-                url: this.baseURL + "ajax_topten.php",
-                success: function(data){
-                    var result = [], item, pattern = new RegExp(">(.+?)<\/a>","g");
-                    data = data.replace("more...", "");
+            $.get(this.baseURL + "ajax_topten.php", function(data) {
+                var TAG_OPEN = "')\">", TAG_CLOSE = "</a>",
+                    pos = data.indexOf(TAG_OPEN), result = [];
 
-                    while ((item = pattern.exec(data)) && item.length == 2) 
-                        //!item[1] || result.push(item[1]);
-                        result.push(item[1]);
-
-                    callback(result);
-                },
-                error: function(){
-                    callback(false);
+                while (pos !== -1) {
+                    a = pos + TAG_OPEN.length;
+                    b = data.indexOf(TAG_CLOSE, a);
+                    result.push(data.substring(a, b));
+                    pos = data.indexOf(TAG_OPEN, b);
                 }
+                callback(result);
             });
-        },
-        //检查是否为汇文OPAC
-        isValidSource: function(url, callback) {
-            $.get(model.opac.baseURL + 'search_rss.php', function(response){
-                callback(response.indexOf("rss") > -1);
-            })
         },
         //执行搜索，并返回给callback
         search: function(keyword, options, callback) {
-            /*
-            http://huiwen.ujs.edu.cn:8080/opac/search_rss.php?dept=ALL&
-            title=%E6%B1%BD%E8%BD%A6%E8%AE%BE%E8%AE%A1&doctype=ALL&
-            lang_code=ALL&match_flag=forward&displaypg=20&showmode=list&
-            orderby=DESC&sort=CATA_DATE&onlylendable=yes&displaypg=50
-
-            RSS抓取接口(不能显示可借数)
-
-            http://huiwen.ujs.edu.cn:8080/opac/search_rss.php?dept=ALL&
-            isbn=9787563379071&doctype=ALL&lang_code=ALL&match_flag=forward&
-            displaypg=20&showmode=list&orderby=DESC&sort=CATA_DATE&onlylendable=yes
-            */
-
-            //预处理参数
-            //preprocess arguments
             var page = options.page || 0,
-                limit = options.limit || 10; //默认翻页
+                limit = options.limit || 10;
             keyword = encodeURIComponent(keyword);
 
             var url = this.baseURL + "openlink.php?strSearchType=title&strText={$k}&displaypg={$l}&page={$p}"
@@ -176,7 +150,7 @@ window.model = {
                         //分解为作者和出版社字段
                         intro = intro[1].split(/\s<br>/);
                         //作者和出版社为空
-                        if(intro.length==1) intro = ["暂无", "暂无"];
+                        if(intro.length == 1) intro = ["暂无", "暂无"];
 
                         //添加项目
                         result.list.push({
