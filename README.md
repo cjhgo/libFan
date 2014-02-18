@@ -1,6 +1,6 @@
-书迷
+# 书迷 #
 
-![libFan](https://raw2.github.com/ChiChou/libFan/master/icon.png)
+![libFan](https://raw.github.com/ChiChou/libFan/master/img/screen.png)
 =============
 
 一个为图书馆爱好者设计的Chrome扩展程序，可以更方便地检索图书馆资源。
