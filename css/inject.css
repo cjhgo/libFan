@@ -1,5 +1,5 @@
 ﻿/* 京东样式表 */
-.box_360buy{
+.box_jd{
 	float: right;
 	width: 448px;
 	border: 1px solid #EED97C;
@@ -10,5 +10,7 @@
 	padding:10px;
 }
 
-.box_360buy h2{margin-bottom:5px}
-.box_360buy a{color:#BB6E0D;font-size:14px;}
+.box_jd h2{margin-bottom:5px}
+.box_jd a{color:#BB6E0D;font-size:14px;}
+
+#libfan-detail tr td:nth-child(2), #libfan-detail tr td:nth-child(3), #libfan-detail tr td:nth-child(4) {display:none;}

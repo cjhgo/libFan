@@ -1,16 +1,10 @@
 ﻿/*
- * Chrome Addin for Huiwen OPAC
- *
- * Copyright (c) 2013,
- * @CodeCorist http://weibo.com/u/2167662922
- * 
- * Released under the GPL license
- * http://www.gnu.org/copyleft/gpl.html
- *
- * UI handler for options
- *
- * 选项界面的响应
- *
+  Chrome Extention for Huiwen OPAC
+
+  Copyright (c) 2013-2014 ChiChou
+  This software may be freely distributed under the MIT license.
+
+  http://chichou.0ginr.com
 */
 
 $(function() {
@@ -23,26 +17,28 @@ $(function() {
 		opacRoot: "opac-root"
 	}, value, e;
 
-	var loadSetting = function(){
-		for(var i in ids){
+	var loadSetting = function() {
+		for (var i in ids) {
 			value = localStorage.getItem(i);
 			e = $("#"+ids[i]);
-			if(!e) continue;
-			switch(e.attr("type")){
+			if (!e) continue;
+			switch (e.attr("type")) {
 				case "checkbox":
-					if(value=="true"){
+					if(value === "true") {
 						e.prop("checked", "checked");
 					}
+
 					break;
 				case "number":
 				case "text":
 				default:
 					e.val(value);
 			}
-		}	
+		}
+		//todo:auth
 	},
 	saveSetting = function() {
-		for(var i in ids) {
+		for (var i in ids) {
 			e = $("#"+ids[i]);
 			if(!e) continue;
 			switch(e.attr("type")){
@@ -64,16 +60,9 @@ $(function() {
 	$("#save").click(function() {
 		saveSetting();
 		$("#successful-saved").animate({opacity:1}, 100);
-		setTimeout(function(){
-			$("#successful-saved").animate({opacity:0});
-		}, 3000);
-	});
-	//关闭
-	$("#close").click(function() {
-		window.close();
-	});
-	$("#opac-selections > a").on("click", function() {
-		$("#opac-root").val(this.href);
-		return false;
-	});
+		setTimeout(function() { $("#successful-saved").animate({opacity:0}); }, 3000);
+	})
+	$("#close").click(function() { open(location, '_self').close(); });
+	$("#opac-selections > a").on("click", function() { $("#opac-root").val(this.href); return false; });
+	$("#auth").on("click", function(){ open(localStorage.opacRoot + 'reader/login.php','login') });
 })

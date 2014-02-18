@@ -1,13 +1,11 @@
 ﻿/*
- * Chrome Addin for Huiwen OPAC
- *
- * Copyright (c) 2013,
- * @CodeCorist http://chichou.0ginr.com/blog
- * 
- * Released under the GPL license
- * http://www.gnu.org/copyleft/gpl.html
- *
- */
+  Chrome Extention for Huiwen OPAC
+
+  Copyright (c) 2013-2014 ChiChou
+  This software may be freely distributed under the MIT license.
+
+  http://chichou.0ginr.com
+*/
 
 $(function() {
 	//是否显示热门关键字

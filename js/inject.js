@@ -1,157 +1,134 @@
 ﻿/*
-    Chrome Extention for Huiwen OPAC
+  Chrome Extention for Huiwen OPAC
+
+  Copyright (c) 2013-2014 ChiChou
+  This software may be freely distributed under the MIT license.
+
+  http://chichou.0ginr.com
 */
 
-//ChiChou [http://chichou.0ginr.com]
-
 (function() {
-    "use strict";
-    //
-    var
-        //程序设定
-        //TODO：
-        config = {
-            school: "ujs",
-            library: "江苏大学图书馆",
-            baseUrl: localStorage.opacRoot + "opac/"
-        },
+  "use strict";
 
-        //获得当前页面的域名
-        domain = (document.domain.match(/amazon|douban|dangdang|jd/i) || null)[0],
+  window.libfan = {};
 
-        //书籍信息
-        book = getBookInfo();
-    ;
+  var domain = (document.domain.match(/amazon|douban|dangdang|jd/i) || null)[0];
+  if(domain) {
+    libfan.mode = "market";
+  } else {
+    //是否OPAC
+    libfan.mode = "opac";
+    return false;
+  }
 
-    if(!(domain && initUI()) return false;
-    getSearchInfo(book.ISBN);
+  var getBookInfo = function() {
+    //书籍的ISBN, 封面, 标题
+    var _ISBN, _cover, _title;
 
-    function getBookInfo() {
-        //书籍的ISBN, 封面, 标题
-        var _ISBN, _cover, _title;
-
-        switch (domain) {
-            case 'douban':
-                _ISBN  = $("#info").text().match(/ISBN\: (\d+)/)[1];
-                _cover = '#mainpic img';
-                _title = $('h1 span').text();
-                break;
-            case 'amazon':
-                var items = $(".content li b");
-                for(var i=0; i<items.length; i++) {
-                    var e = $(items[i]);
-                    if(e.html() == "条形码:") {
-                        _ISBN = e.parent().html().match(/\d+/).toString();
-                        break;
-                    }
-                }
-                _cover = "#original-main-image";
-                _title = $("#btAsinTitle").text().split(' [')[0].toString();
-                break;
-            case 'dangdang':
-                _title = $("h1").text();
-                _ISBN  = $(".ws4").parent().html().substring(27);
-                _cover = "#largePic";
-                break;
-            case 'jd':
-                _ISBN  = $("#summary-isbn .dd").html().toString();
-                _title = $("h1").text().match(/\S+/).toString();
-                _cover = ".bigimg";
-                break;
-            default:
-        }
-        //alert($(_cover).attr("src"));
-        return {
-            ISBN : _ISBN,
-            cover : $(_cover).attr("src"),
-            title : _title
-        };
-    }
-
-    //初始化界面
-    function initUI() {
-        var id = ["ujs-lib-plugin-css", "ujslib"],
-            list = {
-                'douban'   : ["#buyinfo", "gray_ad"],
-                'amazon'   : ['#ps-content', "cBoxInner"],
-                'dangdang' : [".buy_area", "buy_area"],
-                'jd'       : ['#o-suit', "box_jd"]
-            }[domain], markElement;
-
-        if(list) markElement = $(list[0]);
-        if(markElement && markElement.length) {
-            //正确的页面
-            markElement.before('<div class="'+list[1]+'" id="'+id[1]+'"></div>');
-            $('#'+id[1]).append('<h2>'+config.library+'有没有?</h2><div class="bs" id="isex"><img src="'+
-                chrome.extension.getURL("loading.gif")+'""></div>');
-            //加载样式表
-            $("head").append("<link id='"+id[0]+"'>").children("#"+id[0]).attr({
-                rel: "stylesheet",
-                type: "text/css",
-                href: chrome.extension.getURL("inject.css")
-            });
-
-            return true;
-        }
-        return false;
-    }
-
-    /*
-    抓取搜索图书页面
-    部分书籍在OPAC系统中存储的ISBN编号可能是旧版的10位编码，直接截取substring(3,12)即可
-    */
-    function getSearchInfo(ISBN) {
-        ISBN = String(ISBN);
-        if(!/(\d{9}|\d{13})/.test(ISBN)) return;
-        //TODO:
-        var url = config.baseUrl + "openlink.php?strSearchType=isbn&historyCount=1&strText=" + ISBN
-         + "&x=0&y=0&doctype=ALL&match_flag=forward&displaypg=20&sort=CATA_DATE&orderby=desc&showmode=list&dept=ALL";
-        $.ajax({
-            dataType: "html",
-            url: url,
-            success: function (data) {
-                if (data.indexOf('本馆没有您检索的馆藏书目') != -1) {
-                    //如果是13位的ISBN则尝试重试
-                    if(ISBN.length == 13) {
-                        getSearchInfo(ISBN.substring(3, 12));
-                    } else {
-                        var urlFull = config.baseUrl + "openlink.php?strSearchType=title&historyCount=1&strText=" + 
-                            book.title + "&x=16&y=14&doctype=ALL&match_flag=forward&displaypg=20" + 
-                            "&sort=CATA_DATE&orderby=desc&showmode=list&dept=ALL";
-                        $('#isex').html('哎呀，没有找到这本书…… <a href="' + urlFull + '" target="_blank">搜搜类似的书</a>');                        
-                    }
-                } else {
-                    //消除控制台的图片404错误
-                    data = data.replace(/(href|src)=\"..\/tpl\S*?\"/g, "");
-
-                    var dom = $(data),
-                        bookInfo = dom.find("#list_books p span").text().match(/\d+/g),
-                        url = dom.find("h3 a").attr("href"),
-                        total = bookInfo[0], remain = bookInfo[1],
-                        tip = '一共' + total + '本，';
-
-                    tip += ( remain == 0 ? 
-                        '竟然都被借光了！<br />学霸们太威武啦！' : '还剩' + remain + '本~'
-                    );
-
-                    $('#isex').html(tip);
-                    loadBookDetail(url);
-                }
-            }
+    switch (libfan.domain) {
+      case 'douban':
+        _ISBN = $("#info").text().match(/ISBN\: (\d+)/)[1];
+        _cover = '#mainpic img';
+        _title = $('h1 span').text();
+        break;
+      case 'amazon':
+        $(".content li b").each(function(i, e) {
+          var _ = $(e);
+          if (_.html() == "条形码:") {
+            _ISBN = _.parent().html().match(/\d+/).toString();
+            return false;
+          }
         });
-    }
+        _cover = "#original-main-image";
+        _title = $("#btAsinTitle").text().split(' [')[0].toString();
+        break;
+      case 'dangdang':
+        _title = $("h1").text();
+        _ISBN = $(".ws4").parent().html().substring(27);
+        _cover = "#largePic";
+        break;
+      case 'jd':
+        _ISBN = $("#summary-isbn .dd").html().toString();
+        _title = $("h1").text().match(/\S+/).toString();
+        _cover = ".bigimg";
+        break;
+      default:
+      }
+    libfan.book = {
+      ISBN:  _ISBN,
+      cover: $(_cover).attr("src"),
+      title: _title
+    };
+    
+  }, search = function(book, config) {
+    if (!/(\d{9}|\d{13})/.test(book.ISBN)) return;
+    
+    $.get([config.baseUrl, 'search_rss.php?isbn=', book.ISBN].join(''), function(data) {
+      if (data.indexOf('无此类RSS源') !== -1) {
+        //如果是13位的ISBN则尝试重试
+        if (book.ISBN.length == 13) {
+          book.ISBN = book.ISBN.substring(3, 12);
+          search(book, config);
+        } else {
+          $('#libfan-inject-frame').html(['哎呀，没有找到这本书…… <a href="',
+            config.baseUrl,
+            "openlink.php?strSearchType=title&strText=",
+            book.title,
+            '" target="_blank">搜搜类似的书</a>'].join());
+        }
+      } else {
+        //消除控制台的图片404错误
+        data = data.replace(/(href|src)=\"..\/tpl\S*?\"/g, "");
+        var dom = $(data),
+          bookInfo = dom.find("#list_books p span").text().match(/\d+/g),
+          url = dom.find("h3 a").attr("href"),
+          total = bookInfo[0],
+          remain = bookInfo[1],
+          tip = '一共' + total + '本，';
+          tip += (remain == 0 ? '竟然都被借光了！<br />学霸们太威武啦！': '还剩' + remain + '本~');
+        $('#libfan-inject-frame').html(tip);
+        loadBookDetail(url, config);
+      }
+    });
 
-    //抓取具体图书信息页面
-    function loadBookDetail(url) {
-        $.get(config.baseUrl + url, function (data) {
-            //消除控制台404错误
-            data = data.replace(/(href|src)=\"[\S\s]*?\"/g, "");
-            var table = $(data).find("table").removeAttr("width");
+  }, loadBookDetail = function(url, config) {
+    $.get(config.baseUrl + url, function(data) {
+      //消除控制台404错误
+      data = data.replace(/(href|src)=\"[\S\s]*?\"/g, "");
+      var table = $(data).find("table").removeAttr("width");
+      $('#libfan-detail').append(table).append([
+        '<p><a href="',
+        config.baseUrl,
+        url,
+        '" target="_blank">到图书馆看看</a></p>'
+      ]);
+      $("#libfan-detail table").hide().show(500);
+    });
+  };
 
-            $('#ujslib').append(table).append('<p><a href="'+config.baseUrl+url+'" target="_blank">到图书馆看看</a></p>');
-            //删除不必要的信息           
-            $("#ujslib tr td:nth-child(2),#ujslib tr td:nth-child(3),#ujslib tr td:nth-child(4)").remove();
-            $("#ujslib table").hide().show(500);
-        });
-    } 
+  var book = getBookInfo();
+  chrome.extension.sendMessage({type: 'getPref', key: 'inject'}, function(config) {
+    libfan.config = config;
+    var list = {
+        'douban': ["#buyinfo", "gray_ad"],
+        'amazon': ['#ps-content', "cBoxInner"],
+        'dangdang': [".buy_area", "buy_area"],
+        'jd': ['#o-suit', "box_jd"]
+      }[libfan.domain], markElement;
+
+    if (list) markElement = $(list[0]);
+    if (markElement && markElement.length) {
+      var box = $(['<div class="libfan-detail" id="', id[1], '"></div>'].join())
+        .append(['<h2>', config.library, '中查找本书...</h2><div class="bs" id="libfan-inject-frame"><img src="',
+        chrome.extension.getURL("css/loading.gif"), '""></div>'].join())
+      markElement.before(box);
+
+      var css = $("<link id='libfan-plugin-css'>").attr({
+        rel: "stylesheet", type: "text/css", href: chrome.extension.getURL("css/inject.css")
+      });
+      $("head").append(css);
+      search(book, config);
+    };
+    return false;    
+  });
 })();

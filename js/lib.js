@@ -1,15 +1,12 @@
 ﻿/*
- * Chrome Addin for Huiwen OPAC
- *
- * Copyright (c) 2013,
- * @CodeCorist http://weibo.com/u/2167662922
- * 
- * Released under the GPL license
- * http://www.gnu.org/copyleft/gpl.html
- *
- */
+  Chrome Extention for Huiwen OPAC
 
-//model静态类
+  Copyright (c) 2013-2014 ChiChou
+  This software may be freely distributed under the MIT license.
+
+  http://chichou.0ginr.com
+*/
+
 window.model = {
     supoorted: [
         {
@@ -26,12 +23,6 @@ window.model = {
             ver: "5" //TODO:支持5的规则
         }
     ],
-    util: {
-        //检查是否为合法的用户ID
-        isValidId: function(id) {
-            return /[\dA-Za-z]{32,}/.test(id);
-        }
-    },
     //用户信息
     user: {
         baseURL: localStorage.opacRoot + "reader/",
