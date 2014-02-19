@@ -7,6 +7,20 @@
   http://chichou.0ginr.com
 */
 
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    console.log(sender.tab ?
+                "from a content script:" + sender.tab.url :
+                "from the extension");
+
+    if (request.method === 'getPref' && request.key === 'inject') {
+      sendResponse({
+        library: localStorage.libraryName,
+        baseUrl: localStorage.opacRoot + "opac/"
+      });
+    }
+  });
+
 //初始化应用程序设置
 chrome.runtime.onInstalled.addListener(function() {
   if (/^true$/.test(localStorage.installed)) return;
@@ -80,11 +94,12 @@ chrome.runtime.onStartup.addListener(function() {
           });
 
           //弹出消息
-          var msg = webkitNotifications.createNotification("icon.png", "书迷提醒", text) msg.addEventListener('click',
-          function() {
+          var msg = webkitNotifications.createNotification("icon.png", "书迷提醒", text);
+          msg.addEventListener('click', function() {
             msg.cancel();
             window.open('result.html').document.write(pretty);
-          }) msg.show();
+          });
+          msg.show();
         }
 
         //TODO:这里有一些问题
@@ -96,14 +111,5 @@ chrome.runtime.onStartup.addListener(function() {
       }
     });
 
-  }
-});
-
-chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
-  if (message.type === 'getPref' && message.key === 'inject') {
-    sendResponse({
-      library: localStorage.libraryName,
-      baseUrl: localStorage.opacRoot + "opac/"
-    });
   }
 });
