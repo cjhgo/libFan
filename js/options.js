@@ -56,7 +56,11 @@ $(function() {
 
 	//加载设置到界面
 	loadSetting();
-	//保存
+	
+	$("#opac-root").on("click", function() {
+		$(this).select();
+	});
+
 	$("#save").click(function() {
 		saveSetting();
 		$("#successful-saved").animate({opacity:1}, 100);

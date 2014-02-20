@@ -1,7 +1,7 @@
 <!doctype html>
 <html><head><title>书迷</title><meta http-equiv="Content-Type" content="text/HTML; charset=utf-8">
 <link rel="stylesheet" type="text/css" href="css/theme.css">
-<script src="js/zepto.js"></script><script src="js/dialog.js"></script><script src="js/lib.js"></script></head><body class="home">
+<script src="js/jquery-2.1.0.min.js"></script><script src="js/dialog.js"></script><script src="js/lib.js"></script></head><body class="home">
 <header>
   <div id="notifications"></div>
   <div id="logo"><a id="logo-animator" target="_blank" href="help.html"></a></div></header>
@@ -9,7 +9,7 @@
 <!--表单开始-->
 <form target="_blank" action="#" id="search">
 <input placeholder="输关键字，找爱看的书" title="" type="text" id="keyword" name="strText" autofocus="true" autocomplete="off"/>
-<button type="submit">搜索</button>
+<button type="submit"><em class="icon icon-search"></em></button>
 <div id="top-keyword"></div>
 </form>
 <!--表单结束-->
@@ -17,8 +17,8 @@
 <div id="loading">正在搜索...</div><ul id="search-result"></ul><div id="tooltip"></div><nav><a href="#" target="_blank">查看更多</a></nav>
 <!--搜索结果结束-->
 </article>
-<footer><a target="_blank" href="options.html"><em class="icon setting"></em>设置</a>
-<a target="_blank" href="help.html"><em class="icon help"></em>帮助</a>
+<footer><a target="_blank" href="options.html"><em class="icon icon-cog"></em> 设置</a>
+<a target="_blank" href="help.html"><em class="icon icon-info-sign"></em> 帮助</a>
 </footer>
 </body>
 </html>

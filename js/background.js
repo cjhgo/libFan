@@ -61,8 +61,7 @@ chrome.runtime.onStartup.addListener(function() {
     if (!notifyItems[i] || !model.user.hasOwnProperty(i)) break;
 
     totalMsgNum++;
-    model.user[i](localStorage.userId,
-    function(result) {
+    model.user[i](localStorage.userId, function(result) {
       //添加结果集
       if (result && result.list.length) {
         notifications.push(result);
@@ -113,3 +112,17 @@ chrome.runtime.onStartup.addListener(function() {
 
   }
 });
+
+//
+
+var menu = chrome.contextMenus.create({
+  'title': "在图书馆中搜索 '%s'",
+  'contexts': ["selection"],
+  'onclick': function(info, tab) {
+    chrome.tabs.create ({url: localStorage.opacRoot + 
+      "opac/openlink.php?strSearchType=title&strText=" + info.selectionText});    
+  }
+});
+
+console.log(menu);
+console.log(chrome.extension.lastError);

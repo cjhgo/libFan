@@ -43,7 +43,7 @@ $(function() {
 		if(keyword.length > 0) {
 			//显示loading动画
 			$("form").data("status", "busy");
-			$("header").animate({"margin-top":"-105px"}, 300);
+			$("header").slideUp();
 			$("#search").addClass("shim");
 			$("#search-result").empty();
 			$("nav,#top-keyword,footer").hide();
@@ -79,10 +79,11 @@ $(function() {
 						resultList.append(li);
 					});
 					var tip = $("#tooltip");
-					resultList.mouseout(function() {
-						tip.hide(200);
-					}).find("li a").mouseover(function() {
-						tip.html($(this).data("detail")).show(200);
+					$("#search").mouseover(function() {
+						tip.stop().fadeOut();
+					});
+					resultList.find("li a").mouseover(function() {
+						tip.html($(this).data("detail")).fadeIn(100);
 					});
 				} else {
 					//NO results found

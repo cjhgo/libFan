@@ -1,12 +1,11 @@
-﻿{
-  //"update_url":"http://clients2.google.com/service/update2/crx",
+{
   "name": "书迷",
   "version": "2.0.0",
   "manifest_version": 2,
   "description": "查看豆瓣、京东、亚马逊、当当网的图书在江苏大学图书馆借阅情况",
   "content_scripts": [ {
       "css": [ "css/inject.css" ],
-      "js": [ "js/zepto.js" , "js/inject.js" ],
+      "js": [ "js/jquery-2.1.0.min.js" , "js/inject.js" ],
       "matches": [
           "http://book.douban.com/subject/*",
           "http://www.amazon.cn/*",
@@ -18,8 +17,8 @@
    } ],
   "options_page": "options.html",
   "background": {
-    "scripts": [ "js/zepto.js", "js/lib.js" , "js/background.js"],
-    "persistent": false
+    "scripts": [ "js/jquery-2.1.0.min.js", "js/lib.js" , "js/background.js"],
+    "persistent": true
   },
   "browser_action": {
     "default_icon": "icon.png",
@@ -35,7 +34,8 @@
   "permissions": [
     "tabs",
     "http://*/*",
-    "notifications"
+    "notifications",
+    "contextMenus"
   ],
   "web_accessible_resources": [ "css/inject.css" , "js/lib.js", "css/icon.png", "css/loading.gif"]
 }

@@ -1,4 +1,6 @@
-﻿body{font-family:Tahoma;font-size:16px;margin:0}
+﻿@import url('icon-font.css');
+
+body{font-family:Tahoma;font-size:16px;margin:0}
 ::selection{background:#b2cce6;color:#3F5163;}
 h1{font-size:23px;color:#888;margin:0}
 h2{color:#6F6F6F;font-weight:normal;font-size:1.25rem;}
@@ -36,6 +38,8 @@ button:active{
   box-shadow:none;
   text-shadow:none;
 }
+
+button >.icon{margin-right:2px;}
 
 /*底部菜单*/
 footer a{opacity:0.85;height:21px;display:inline-block;line-height:21px;color:#333;margin-left:10px;}
@@ -92,13 +96,13 @@ footer a:hover{opacity:1;}
 #search-result em{color:#A0444B;font-style:normal;font-weight:bold;margin-right:3px;}
 #search-result span{line-height:1rem;display:inline-block;margin-right:10px;color:#313131;float:left;}
 #top-keyword{text-align:left}
-#top-keyword a{margin:3px 5px;display:inline-block;color:rgb(145, 145, 145);font-size:.75rem;}
-#top-keyword a:hover{color:#8F2A2A;}
+#top-keyword a{margin:3px 5px;display:inline-block;color:rgb(145, 145, 145);font-size:.8125rem;}
+#top-keyword a:hover{color:#09f;}
 #loading{height:20px;background:url('loading.gif') no-repeat center 0 transparent;
   text-align:center;padding-top:73px;display:none;font-size:.75rem;}
 
 /*浮动提示*/
-#tooltip{position:absolute;z-index:2;background:rgba(0, 0, 0, 0.57);color:#fff;padding:10px;top:0;
+#tooltip{position:fixed;z-index:2;background:rgba(0, 0, 0, 0.57);color:#fff;padding:10px;top:0;
   box-shadow:0 1px 1px #000;width:100%;display:none;text-shadow:1px 1px 1px #000;line-height:1.125rem;font-size:.75rem;}
 #tooltip::before,#tooltip::after{content:"";position:absolute;right:90px;height:7px;width:14px;}
 #tooltip::before{bottom:auto;top:-7px;}
@@ -108,11 +112,6 @@ footer a:hover{opacity:1;}
 #tooltip.bottom::after{display:none;}
 
 .clear{clear:both;}
-em.icon{background:url(icons.png);width:21px;height:21px;display:inline-block;float:left;margin-right:1px;}
-.icon.help{background-position:-21px}
-.icon.login{background-position:-42px}
-.icon.ok{background-position:-63px}
-.icon.cancel{background-position:-84px}
 
 #successful-saved{color:#B40B4F;opacity:0;margin-left:2rem;}
 .contents{max-width:600px;padding-left:10px;}
@@ -121,3 +120,4 @@ em.icon{background:url(icons.png);width:21px;height:21px;display:inline-block;fl
 #opac-root{width:25rem;border:1px solid #D3D3D3;padding:.25rem;}
 #opac-selections{text-indent:0}
 #opac-selections > a{display:inline-block;}
+
