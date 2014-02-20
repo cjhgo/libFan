@@ -15,8 +15,7 @@ $(function() {
         enableNotify: "enable-notify",
         userId: "user-id",
         opacRoot: "opac-root",
-        showContextMenu: "show-context-menu",
-        userName: "user-name"
+        showContextMenu: "show-context-menu"
     }, value, e;
 
     var loadSetting = function() {
@@ -24,10 +23,6 @@ $(function() {
             value = localStorage.getItem(i);
             e = $("#" + ids[i]);
             if (!e) continue;
-            if (e[0].tagName.toLowerCase() !== "input") {
-                e.text(value);
-                continue;
-            }
             switch (e.attr("type")) {
                 case "checkbox":
                     if(value === "true") {
@@ -41,11 +36,11 @@ $(function() {
             }
         }
         $(localStorage.userId ? '#message-authed' : '#message-guest').show();
+        $('#user-name').text(localStorage.userName);
     },
     saveSetting = function() {
         for (var i in ids) {
             e = $("#"+ids[i]);
-            if(!e || e[0].tagName !== "input") continue;
             switch(e.attr("type")) {
                 case "checkbox":
                     value = e.prop("checked");
