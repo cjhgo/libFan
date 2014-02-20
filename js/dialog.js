@@ -9,11 +9,11 @@
 
 $(function() {
 	//是否显示热门关键字
-	if(!JSON.parse(localStorage.displayTopWords)) {
+	if(!JSON.parse(localStorage.displayTopWords || 'false')) {
 		$("#top-keyword").hide();
 	}
 
-	var notifyCount = JSON.parse(localStorage.notifyCount);
+	var notifyCount = JSON.parse(localStorage.notifyCount || 0);
 	if(notifyCount && notifyCount > 0) {		
 		setTimeout(function() {
 			$('#notifications').fadeIn().text(notifyCount);

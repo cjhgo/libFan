@@ -2,7 +2,7 @@
   "name": "书迷",
   "version": "2.0.0",
   "manifest_version": 2,
-  "description": "查看豆瓣、京东、亚马逊、当当网的图书在江苏大学图书馆借阅情况",
+  "description": "汇文OPAC系统便捷扩展",
   "content_scripts": [ {
       "css": [ "css/inject.css" ],
       "js": [ "js/jquery-2.1.0.min.js" , "js/inject.js" ],

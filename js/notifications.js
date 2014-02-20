@@ -8,7 +8,7 @@
 */
 
 $(function() {
-  var nofity, notifications = JSON.parse(localStorage.notifications), pretty = '';
+  var nofity, notifications = JSON.parse(localStorage.notifications || '[]'), pretty = '';
 
   while (notify = notifications.pop()) {
     pretty += ("<section><h2>" + notify.list.length + "本" + notify.title + "</h2><ul>");
@@ -23,9 +23,7 @@ $(function() {
   localStorage.removeItem('notifyCount');
   chrome.browserAction.setBadgeText({text: ''});
 
-  var closeWindow = function() {
-    open('','_self','').close();
-  };
+  var closeWindow = function() { open(location, '_self').close(); };
   $('#mark-as-read').on('click', function() {
     localStorage.removeItem('notifications');
     closeWindow();
