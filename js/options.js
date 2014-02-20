@@ -47,10 +47,9 @@ $(function() {
                     break;
                 case "number":
                 case "text":
+                default:
                     value = e.val();
                     break;
-                default:
-                    value = e.text();
             }
             localStorage.setItem(i, value);
         }

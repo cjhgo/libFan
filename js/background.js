@@ -106,13 +106,6 @@ chrome.runtime.onStartup.addListener(function() {
         } else {
           localStorage.removeItem('notifyCount');
         }
-
-        //TODO:这里有一些问题
-        /*
-				var notification = webkitNotifications.createHTMLNotification("notification.html");
-				notification.show();
-				setTimeout(function(){notification.close()}, localStorage.notifyTimeout || 20000);
-				*/
       }
     });
 
