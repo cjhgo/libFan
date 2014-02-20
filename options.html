@@ -21,6 +21,7 @@
   <section>
     <h2><a name="interface"></a>界面</h2>
     <p><input type="checkbox" id="show-top-search"><label for="show-top-search">在首页显示热门关键词</label></p>
+    <p><input type="checkbox" id="show-context-menu"><label for="show-context-menu">使用右键快捷搜索菜单（*重启浏览器后生效）</label></p>
   </section>
   <section>
     <h2><a name="search"></a>搜索</h2>
@@ -29,7 +30,11 @@
   <section>
     <h2><a name="notify"></a>还书提醒</h2>
     <p><input type="checkbox" id="enable-notify"><label for="enable-notify">每次启动 Chrome 时检查到期图书</label></p>
-    <p>您还没有验证帐号，请<button id="auth"><em class="icon icon-user"></em>登录</button><input id="user-id" type="hidden"></p>
+    <p style="display:none" id="message-authed">您已经登陆了<span id="user-name" class="bold">用户名</span>的帐号。
+      <button id="reauth"><em class="icon icon-user"></em>更改帐号</button>
+      <button id="logoff"><em class="icon icon-delete"></em>删除帐号</button></p>
+    <p style="display:none" id="message-guest">您还没有验证帐号，请
+      <button id="auth"><em class="icon icon-user"></em>登录</button><input id="user-id" type="hidden"></p>
   </section>
   <section>
     <h2><a name="opac"></a>图书馆</h2>

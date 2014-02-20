@@ -9,14 +9,22 @@
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
-    console.log(sender.tab ?
-                "from a content script:" + sender.tab.url :
-                "from the extension");
-
     if (request.method === 'getPref' && request.key === 'inject') {
       sendResponse({
         library: localStorage.libraryName,
         baseUrl: localStorage.opacRoot + "opac/"
+      });
+    } else if (request.method === 'setNotification') {
+      localStorage.userId = request.uid;
+      localStorage.userName = request.userName;
+      localStorage.enableNotify = "true";
+    } else if (request.method === 'generateList') {
+      $.post(localStorage.opacRoot + "reader/book_hist.php", {'para_string':'all', 'topage':'1'}, function(data) {
+        var dom = $(data);
+        localStorage.rawListData = dom.find("table").html()
+          .replace(/href=\"\.\.\/opac/g, 'href="' + localStorage.opacRoot + 'opac')
+          .replace(/bgcolor=\"#[0-9A-Fa-f]{3,6}\"/g, '');
+        chrome.tabs.create({url: "list.html"});
       });
     }
   });
@@ -47,8 +55,9 @@ chrome.runtime.onStartup.addListener(function() {
   totalMsgNum = 0,
   receivedMsgNum = 0;
 
+  console.log(localStorage.enableNotify);
   //同步提醒
-  if (!JSON.parse(localStorage.enableNotify)) return;
+  if (localStorage.enableNotify != "true") return;
 
   //TODO:在设置界面中设定需要接收的提醒
   var notifyItems = {
@@ -69,36 +78,33 @@ chrome.runtime.onStartup.addListener(function() {
 
       //是否全部同步完成
       if (++receivedMsgNum == totalMsgNum) {
-        var notify, text = "您有",
-        pretty = "<h1>提醒中心</h1>";
+        var notify, text = "您有";
         var notifyCount = notifications.length;
 
         localStorage.notifications = JSON.stringify(notifications);
-        while (notify = notifications.pop()) {
-          text += (notify.list.length + "本" + notify.title + "：\n");
-          pretty += ("<section><h2>" + notify.list.length + "本" + notify.title + "</h2><ul>");
-          for (var j = 0; j < notify.list.length; j++) {
-            if (text.length < 60) text += (notify.list[j].title + " \n");
-            pretty += ("<li>" + notify.list[j].title + "</li>");
-          }
-          pretty += ("</ul></section>");
-        }
-
-        localStorage.notificationsHTML = pretty;
 
         //显示提醒数目
         if (notifyCount) {
-          chrome.browserAction.setBadgeText({
-            text: notifyCount.toString()
-          });
+          notifyCount = notifyCount.toString();
+          chrome.browserAction.setBadgeText({text: notifyCount});
+          localStorage.notifyCount = notifyCount;
+
+          while (notify = notifications.pop()) {
+            text += (notify.list.length + "本" + notify.title + "：\n");
+            for (var j = 0; j < notify.list.length && text.length < 60; j++) {
+              text += (notify.list[j].title + " \n");
+            }
+          }
 
           //弹出消息
           var msg = webkitNotifications.createNotification("icon.png", "书迷提醒", text);
           msg.addEventListener('click', function() {
             msg.cancel();
-            window.open('result.html').document.write(pretty);
+            window.open('notifications.html');
           });
           msg.show();
+        } else {
+          localStorage.removeItem('notifyCount');
         }
 
         //TODO:这里有一些问题
@@ -113,16 +119,19 @@ chrome.runtime.onStartup.addListener(function() {
   }
 });
 
-//
-
-var menu = chrome.contextMenus.create({
-  'title': "在图书馆中搜索 '%s'",
-  'contexts': ["selection"],
-  'onclick': function(info, tab) {
-    chrome.tabs.create ({url: localStorage.opacRoot + 
-      "opac/openlink.php?strSearchType=title&strText=" + info.selectionText});    
-  }
-});
-
-console.log(menu);
-console.log(chrome.extension.lastError);
+if (localStorage.showContextMenu === "true") {
+  localStorage.contextMenuId = chrome.contextMenus.create({
+    'title': '在' + localStorage.libraryName +'中搜索 "%s"',
+    'contexts': ["selection"],
+    'onclick': function(info, tab) {
+      var keyword = info.selectionText, method = 'title', match = null;
+      if(match = keyword.match(/\b(?:ISBN(?:: ?| ))?((?:978-)?(?:\d-\d{3}-\d{5}-|(?:978)?\d{9})[\dx])\b/i)) {
+        method = 'isbn';
+        keyword = match[1];
+      }
+      chrome.tabs.create({
+        url: localStorage.opacRoot + "opac/openlink.php?strSearchType=" + method + "&strText=" + keyword
+      });    
+    }
+  });
+}

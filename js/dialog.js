@@ -13,6 +13,12 @@ $(function() {
 		$("#top-keyword").hide();
 	}
 
+	var notifyCount = JSON.parse(localStorage.notifyCount);
+	if(notifyCount && notifyCount > 0) {		
+		setTimeout(function() {
+			$('#notifications').fadeIn().text(notifyCount);
+		}, 1000);		
+	}
 	//http://www.bing.com/HPImageArchive.aspx?idx=0&n=1&mkt=zh-CN
 
 	model.opac.getTopKeyword(function(result) {

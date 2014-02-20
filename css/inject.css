@@ -13,6 +13,49 @@
 	font: 14px/28px \5fae\8f6f\96c5\9ed1;
 	color: #333;
 }
-.libfan.jd a{color:#BB6E0D;font-size:14px;}
+.libfan.jd a {color:#BB6E0D;font-size:14px;}
 
 #libfan-detail tr td:nth-child(2), #libfan-detail tr td:nth-child(3), #libfan-detail tr td:nth-child(4) {display:none;}
+
+#libfan-toolbar {
+	box-shadow: 0 0 6px rgba(0,0,0,.6);
+	margin-bottom:6px;
+	background: #FAFF88;
+	clear:both;
+	text-align: center;
+	line-height: 24px;
+	padding:5px;
+	position: fixed;
+	bottom: 20px;
+	margin-left:-120px;
+	width:240px;
+	left: 50%;
+	background: rgba(0, 0, 0, .75);
+	border-radius: 4px;
+	color:#666;
+	/*border: 4px solid rgba(20, 20, 20, 0.49);*/
+}
+
+#libfan-toolbar > a {
+	transition: color .2s ease-in;
+	display: inline-block;
+	padding: 5px;
+	font-size: 14px;
+	color: #ccc;
+}
+
+#libfan-toolbar > a:hover {
+	color:#fff;
+}
+
+#libfan-toolbar .logo {
+	width:24px; height:24px;
+	position: relative; top: -1px; margin:5px;
+	vertical-align: middle;
+}
+
+#libfan-message-tip {
+	text-align: center;
+	color: #FFF73C;
+	font-size: 14px;
+}

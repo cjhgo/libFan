@@ -11,7 +11,8 @@
           "http://www.amazon.cn/*",
           "http://www.amazon.com/*",
           "http://product.dangdang.com/*", 
-          "http://item.jd.com/*"          
+          "http://item.jd.com/*",
+          "http://*/reader/*"
       ],
       "run_at": "document_end"
    } ],
@@ -37,5 +38,5 @@
     "notifications",
     "contextMenus"
   ],
-  "web_accessible_resources": [ "css/inject.css" , "js/lib.js", "css/icon.png", "css/loading.gif"]
+  "web_accessible_resources": [ "css/inject.css" , "js/lib.js", "icon.png", "css/loading.gif"]
 }
