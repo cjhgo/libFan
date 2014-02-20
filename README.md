@@ -1,37 +1,12 @@
 # 书迷 #
 
-
-=============
+![logo](https://github.com/ChiChou/libFan/blob/master/icon.png?raw=true)
 
 一个为图书馆爱好者设计的Chrome扩展程序，可以更方便地检索图书馆资源。
 
-基于[lmmsoft/njust-library-chrome-plugin](https://github.com/lmmsoft/njust-library-chrome-plugin)重构。
+基于[lmmsoft/njust-library-chrome-plugin](https://github.com/lmmsoft/njust-library-chrome-plugin)重构。适用于汇文OPAC V4.5系统。
 
-##功能
-
-1.便捷的馆藏书目关键字检索
-
-![libFan](https://raw.github.com/ChiChou/libFan/master/img/screen.png)
-
-![快捷搜索](https://raw.github.com/ChiChou/libFan/master/img/search_result.png)
-
-直接在对话框中搜索
-
-![右键菜单](https://raw.github.com/ChiChou/libFan/master/img/context_search.png)
-
-右键菜单快捷搜索
-
-2.启动浏览器时检查图书到期情况并显示还书提醒。
-
-![启用到期提醒](https://raw.github.com/ChiChou/libFan/master/img/enable_notify.png)
-
-![到期提醒](https://raw.github.com/ChiChou/libFan/master/img/notification.png)
-
-3.在浏览豆瓣、亚马逊、当当、京东的图书网页时，可直接查看书籍在图书馆的馆藏和借阅情况
-
-4.生成借阅记录
-
-![书单](https://raw.github.com/ChiChou/libFan/master/img/history.png)
+更详细的介绍请阅读 [Wiki](https://github.com/ChiChou/libFan/wiki)
 
 ##安装扩展
 
@@ -47,8 +22,40 @@
 
 ![libFan](https://raw.github.com/ChiChou/libFan/master/img/install.png)
 
-##适用范围和反馈
+##意见反馈
 
 理论上本软件兼容使用了 汇文OPAC V4.5 的系统，欢迎提出[意见和Bug反馈](http://chichou.0ginr.com/blog/667  "意见反馈")。
 
 汇文V5.0 在接口上有轻微的差别，下一步打算对其兼容。
+
+##捐助
+
+如果你觉得这个软件很有用，[捐款](https://me.alipay.com/ChiChou)打赏作者一杯咖啡吧~
+
+##许可证
+
+本软件遵循MIT许可证发布。
+
+Copyright (c) 2014 ChiChou
+http://chichou.0ginr.com/
+
+The MIT License
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
