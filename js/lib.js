@@ -6,7 +6,16 @@
 
   http://chichou.0ginr.com
 */
-
+if (!String.prototype.contains) {
+  String.prototype.contains = function() {
+    return String.prototype.indexOf.apply(this, arguments) !== -1;
+  };
+}
+if (!String.prototype.trim) {
+  String.prototype.trim = function () {
+    return this.replace(/^\s+|\s+$/g, '');
+  };
+}
 window.model = {
     supoorted: [
         {

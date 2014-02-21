@@ -21,6 +21,10 @@ chrome.runtime.onMessage.addListener(
     } else if (request.method === 'generateList') {
       $.post(localStorage.opacRoot + "reader/book_hist.php", {'para_string':'all', 'topage':'1'}, function(data) {
         var dom = $(data);
+        if(dom.find("caption").text().contains("登录")) {
+          chrome.tabs.reload(sender.tab.id);
+          return;      
+        }
         localStorage.rawListData = dom.find("table").html()
           .replace(/href=\"\.\.\/opac/g, 'href="' + localStorage.opacRoot + 'opac')
           .replace(/bgcolor=\"#[0-9A-Fa-f]{3,6}\"/g, '');
@@ -89,11 +93,16 @@ chrome.runtime.onStartup.addListener(function() {
           chrome.browserAction.setBadgeText({text: notifyCount});
           localStorage.notifyCount = notifyCount;
 
-          while (notify = notifications.pop()) {
-            text += (notify.list.length + "本" + notify.title + "：\n");
-            for (var j = 0; j < notify.list.length && text.length < 60; j++) {
-              text += (notify.list[j].title + " \n");
-            }
+          while (notify = notifications.pop()) {
+
+            text += (notify.list.length + "本" + notify.title + "：\n");
+
+            for (var j = 0; j < notify.list.length && text.length < 60; j++) {
+
+              text += (notify.list[j].title + " \n");
+
+            }
+
           }
 
           //弹出消息

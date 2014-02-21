@@ -7,21 +7,50 @@
   http://chichou.0ginr.com
 */
 
+if (!String.prototype.contains) {
+  String.prototype.contains = function() {
+    return String.prototype.indexOf.apply(this, arguments) !== -1;
+  };
+}
+if (!String.prototype.trim) {
+  String.prototype.trim = function () {
+    return this.replace(/^\s+|\s+$/g, '');
+  };
+}
+
 (function() {
   "use strict";
 
-  (function() {
-    if (!String.prototype.contains) {
-      String.prototype.contains = function() {
-          return String.prototype.indexOf.apply(this, arguments) !== -1;
-      };
-    }
-    if (!String.prototype.trim) {
-      String.prototype.trim = function () {
-        return this.replace(/^\s+|\s+$/g, '');
-      };
-    }
-  })();
+  // TODO:修改调用链
+  var Queue = function(funcs, scope) {  
+    (function next() {  
+      if(funcs && funcs.length) {  
+          funcs.shift().apply(scope || {}, [next].concat(Array.prototype.slice.call(arguments, 0)));  
+      }  
+    })();  
+  };
+   
+  // usage:
+  // var obj = {  
+  //     value: null 
+  // };
+   
+  // queue([  
+  //     function(callback) {  
+  //         var self = this;  
+  //         setTimeout(function() {  
+  //             self.value = 10;  
+  //             callback(20);  
+  //         }, 200);  
+  //     },  
+  //     function(callback, add) {  
+  //         console.log(this.value + add);  
+  //         callback();  
+  //     },  
+  //     function() {  
+  //         console.log(obj.value);  
+  //     }  
+  // ], obj);
 
   var libfan = {};
 
@@ -164,13 +193,13 @@
   }, runInOpac = function(config) {
     var copyright = $("#copy").text(), match;
     if(copyright &&
-        (copyright.indexOf("江苏汇文") > -1) && 
+        (copyright.contains("江苏汇文")) && 
         (match = copyright.match(/OPAC\s+V([0-9.]+)\s/))) {
       var ver = match[1];
       //TODO:
       if (ver !== "4.5") return false;
 
-      if ($("caption").text().indexOf("登录") > -1) {
+      if ($("caption").text().contains("登录")) {
         $("input[type=submit]").before(libfan.html.loginTip);        
       } else if (location.pathname.contains('redr_cust_result.php') &&
           $("#nav_mylibhome").text().contains('我的首页')) {
