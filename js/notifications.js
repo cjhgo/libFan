@@ -18,7 +18,8 @@ $(function() {
     pretty += ("</ul></section>");
   }
 
-  $("#notifications").html(pretty);
+  if(notifications.length)
+    $("#notifications").html(pretty);
   // localStorage.notificationsHTML = pretty;
   localStorage.removeItem('notifyCount');
   chrome.browserAction.setBadgeText({text: ''});
