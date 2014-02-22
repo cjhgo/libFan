@@ -19,7 +19,10 @@ $(function() {
   }
 
   if(notifications.length)
-    $("#notifications").html(pretty);
+    $('#notifications').html(pretty);
+  else
+    $('#close-window').hide();
+  
   // localStorage.notificationsHTML = pretty;
   localStorage.removeItem('notifyCount');
   chrome.browserAction.setBadgeText({text: ''});
