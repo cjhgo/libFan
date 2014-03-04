@@ -1,8 +1,8 @@
 {
-  "name": "书迷",
+  "name": "馆藏学霸",
   "version": "2.0.0",
   "manifest_version": 2,
-  "description": "汇文OPAC系统便捷扩展",
+  "description": "汇文OPAC系统第三方便捷扩展",
   "content_scripts": [ {
       "css": [ "css/inject.css" ],
       "js": [ "js/jquery-2.1.0.min.js" , "js/inject.js" ],
@@ -23,7 +23,7 @@
   },
   "browser_action": {
     "default_icon": "icon.png",
-    "default_title": "书迷",
+    "default_title": "馆藏学霸",
     "default_popup": "popup.html"
   },
   "icons": {

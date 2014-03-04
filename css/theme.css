@@ -1,6 +1,6 @@
 ﻿@import url('icon-font.css');
 
-::selection{background:#b2cce6;}
+::selection {background:#07a;color:#fff;text-shadow:none;}
 body{font-family:Tahoma;font-size:16px;margin:0}
 h1{font-size:23px;color:#888;margin:0}
 h2{color:#6F6F6F;font-weight:normal;font-size:1.25rem;}
