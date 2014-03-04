@@ -23,7 +23,7 @@ chrome.runtime.onMessage.addListener(
         var dom = $(data);
         if(dom.find("caption").text().contains("登录")) {
           chrome.tabs.reload(sender.tab.id);
-          return;      
+          return;
         }
         localStorage.rawListData = dom.find("table").html()
           .replace(/href=\"\.\.\/opac/g, 'href="' + localStorage.opacRoot + 'opac')
@@ -133,7 +133,7 @@ if (localStorage.showContextMenu === "true") {
       }
       chrome.tabs.create({
         url: localStorage.opacRoot + "opac/openlink.php?strSearchType=" + method + "&strText=" + keyword
-      });    
+      });
     }
   });
 }
