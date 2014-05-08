@@ -1,6 +1,4 @@
-# 书迷 #
-
-![logo](https://github.com/ChiChou/libFan/blob/master/icon.png?raw=true)
+# ![logo](icon.png) 书迷 #
 
 一个为图书馆爱好者设计的Chrome扩展程序，可以更方便地检索图书馆资源。
 
@@ -10,7 +8,9 @@
 
 ##安装扩展
 
-在 Chrome 商店发布应用需要使用 Google 钱包一次性支付一笔费用，由于中国大陆不能办理 Google 钱包，作者表示非常无奈。要是能注册我也愿意花钱……
+在 Chrome 商店发布应用需要使用 Google 钱包一次性支付一笔费用，由于
+中国大陆不能办理 Google 钱包，作者表示非常无奈。要是能注册我也愿意
+花钱……
 
 安装插件请使用开发者模式导入源代码
 
@@ -20,23 +20,25 @@
 
 3.将文件夹拖入即可安装。
 
-![libFan](https://raw.github.com/ChiChou/libFan/master/img/install.png)
+![libFan](img/install.png)
 
 ##意见反馈
 
-理论上本软件兼容使用了 汇文OPAC V4.5 的系统，欢迎提出[意见和Bug反馈](http://chichou.0ginr.com/blog/667  "意见反馈")。
+理论上本软件兼容使用了 汇文OPAC V4.5 的系统，欢迎提出
+[意见和Bug反馈](http://chichou.0ginr.com/blog/667  "意见反馈")。
 
 汇文V5.0 在接口上有轻微的差别，下一步打算对其兼容。
 
 ##捐助
 
-如果你觉得这个软件很有用，[捐款](https://me.alipay.com/ChiChou)打赏作者一杯咖啡吧~
+如果你觉得这个软件很有用，[捐款](https://me.alipay.com/ChiChou)打赏
+作者一杯咖啡吧~
 
 ##许可证
 
 本软件遵循MIT许可证发布。
 
-Copyright (c) 2014 ChiChou
+(c)Copyright 2014 ChiChou
 http://chichou.0ginr.com/
 
 The MIT License
