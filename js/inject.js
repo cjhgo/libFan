@@ -21,37 +21,6 @@ if (!String.prototype.trim) {
 (function() {
   "use strict";
 
-  // TODO:修改调用链
-  var Queue = function(funcs, scope) {  
-    (function next() {  
-      if(funcs && funcs.length) {  
-          funcs.shift().apply(scope || {}, [next].concat(Array.prototype.slice.call(arguments, 0)));  
-      }  
-    })();  
-  };
-   
-  // usage:
-  // var obj = {  
-  //     value: null 
-  // };
-   
-  // queue([  
-  //     function(callback) {  
-  //         var self = this;  
-  //         setTimeout(function() {  
-  //             self.value = 10;  
-  //             callback(20);  
-  //         }, 200);  
-  //     },  
-  //     function(callback, add) {  
-  //         console.log(this.value + add);  
-  //         callback();  
-  //     },  
-  //     function() {  
-  //         console.log(obj.value);  
-  //     }  
-  // ], obj);
-
   var libfan = {};
 
   libfan.html = {

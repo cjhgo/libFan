@@ -19,16 +19,21 @@ chrome.runtime.onMessage.addListener(
       localStorage.userName = request.userName;
       localStorage.enableNotify = "true";
     } else if (request.method === 'generateList') {
-      $.post(localStorage.opacRoot + "reader/book_hist.php", {'para_string':'all', 'topage':'1'}, function(data) {
+      $.post(localStorage.opacRoot + "reader/book_hist.php", {
+        'para_string': 'all',
+        'topage': '1'
+      }, function(data) {
         var dom = $(data);
-        if(dom.find("caption").text().contains("登录")) {
+        if (dom.find("caption").text().contains("登录")) {
           chrome.tabs.reload(sender.tab.id);
           return;
         }
         localStorage.rawListData = dom.find("table").html()
           .replace(/href=\"\.\.\/opac/g, 'href="' + localStorage.opacRoot + 'opac')
           .replace(/bgcolor=\"#[0-9A-Fa-f]{3,6}\"/g, '');
-        chrome.tabs.create({url: "list.html"});
+        chrome.tabs.create({
+          url: "list.html"
+        });
       });
     }
   });
@@ -56,8 +61,8 @@ chrome.runtime.onInstalled.addListener(function() {
 chrome.runtime.onStartup.addListener(function() {
   //待处理提醒
   var notifications = [],
-  totalMsgNum = 0,
-  receivedMsgNum = 0;
+    totalMsgNum = 0,
+    receivedMsgNum = 0;
 
   console.log(localStorage.enableNotify);
   //同步提醒
@@ -90,28 +95,44 @@ chrome.runtime.onStartup.addListener(function() {
         //显示提醒数目
         if (notifyCount) {
           notifyCount = notifyCount.toString();
-          chrome.browserAction.setBadgeText({text: notifyCount});
+          chrome.browserAction.setBadgeText({
+            text: notifyCount
+          });
           localStorage.notifyCount = notifyCount;
 
           while (notify = notifications.pop()) {
-
             text += (notify.list.length + "本" + notify.title + "：\n");
-
             for (var j = 0; j < notify.list.length && text.length < 60; j++) {
-
               text += (notify.list[j].title + " \n");
-
             }
-
           }
 
-          //弹出消息
-          var msg = webkitNotifications.createNotification("icon.png", "书迷提醒", text);
-          msg.addEventListener('click', function() {
-            msg.cancel();
-            window.open('notifications.html');
-          });
-          msg.show();
+          var showNotification = function() {
+            // 弹出消息
+            var notification = new Notification('书迷提醒', {
+              icon: 'icon.png',
+              body: text
+            });
+            msg.addEventListener('click', function() {
+              msg.cancel();
+              window.open('notifications.html');
+            });
+            msg.show();
+          }
+
+          if (!("Notification" in window)) {
+            alert("This browser does not support desktop notification");
+          } else if (Notification.permission === "granted") {
+            showNotification();
+          } else if (Notification.permission !== 'denied') {
+            Notification.requestPermission(function(permission) {
+              // If the user is okay, let's create a notification
+              if (permission === "granted") {
+                showNotification();
+              }
+            });
+          }
+
         } else {
           localStorage.removeItem('notifyCount');
         }
@@ -123,11 +144,13 @@ chrome.runtime.onStartup.addListener(function() {
 
 if (localStorage.showContextMenu === "true") {
   localStorage.contextMenuId = chrome.contextMenus.create({
-    'title': '在' + localStorage.libraryName +'中搜索 "%s"',
+    'title': '在' + localStorage.libraryName + '中搜索 "%s"',
     'contexts': ["selection"],
     'onclick': function(info, tab) {
-      var keyword = info.selectionText, method = 'title', match = null;
-      if(match = keyword.match(/\b(?:ISBN(?:: ?| ))?((?:978-)?(?:\d-\d{3}-\d{5}-|(?:978)?\d{9})[\dx])\b/i)) {
+      var keyword = info.selectionText,
+        method = 'title',
+        match = null;
+      if (match = keyword.match(/\b(?:ISBN(?:: ?| ))?((?:978-)?(?:\d-\d{3}-\d{5}-|(?:978)?\d{9})[\dx])\b/i)) {
         method = 'isbn';
         keyword = match[1];
       }
