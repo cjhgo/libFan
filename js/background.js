@@ -1,11 +1,46 @@
 /*
   Chrome Extention for Huiwen OPAC
 
-  Copyright (c) 2013-2014 ChiChou
+  Copyright (c) 2013-2015 ChiChou
   This software may be freely distributed under the MIT license.
 
   http://chichou.0ginr.com
 */
+
+var RE_ISBN = /\b(?:ISBN(?:: ?| ))?((?:978-)?(?:\d-\d{3}-\d{5}-|(?:978)?\d{9})[\dx])\b/i;
+
+var Config = {};
+
+//初始设置
+var defaultConfig = {
+  enableNotify: false,
+  resultsPerPage: 10,
+  displayTopWords: true,
+  libraryName: "江苏大学图书馆",
+  opacRoot: "http://huiwen.ujs.edu.cn:8080/"
+};
+
+for (var key in defaultConfig) {
+  Config[key] = JSON.parse(localStorage) || defaultConfig[key];
+}
+
+/**
+ * get configuration
+ * @param  {String} key 
+ * @return {Object} value
+ */
+Config.get = function(key) {
+  return Config[key];
+}
+
+/**
+ * set configuration
+ * @param {String} key
+ * @param {String} value
+ */
+Config.set = function(key, value) {
+  Config[key] = localStorage[key] = value;
+}
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
@@ -42,15 +77,6 @@ chrome.runtime.onMessage.addListener(
 chrome.runtime.onInstalled.addListener(function() {
   if (/^true$/.test(localStorage.installed)) return;
 
-  //初始设置
-  var defaultConfig = {
-    enableNotify: false,
-    resultsPerPage: 10,
-    displayTopWords: true,
-    libraryName: "江苏大学图书馆",
-    opacRoot: "http://huiwen.ujs.edu.cn:8080/"
-  };
-
   for (var i in defaultConfig) {
     localStorage.setItem(i, defaultConfig[i]);
   }
@@ -70,8 +96,7 @@ chrome.runtime.onStartup.addListener(function() {
 
   //TODO:在设置界面中设定需要接收的提醒
   var notifyItems = {
-    getExpired: true,
-    //超期图书
+    getExpired: true, //超期图书
     getAboutToExpire: true //即将到期图书
   };
 
@@ -142,15 +167,15 @@ chrome.runtime.onStartup.addListener(function() {
   }
 });
 
-if (localStorage.showContextMenu === "true") {
-  localStorage.contextMenuId = chrome.contextMenus.create({
+if (Config.showContextMenu) {
+  var menuId = chrome.contextMenus.create({
     'title': '在' + localStorage.libraryName + '中搜索 "%s"',
     'contexts': ["selection"],
     'onclick': function(info, tab) {
       var keyword = info.selectionText,
         method = 'title',
-        match = null;
-      if (match = keyword.match(/\b(?:ISBN(?:: ?| ))?((?:978-)?(?:\d-\d{3}-\d{5}-|(?:978)?\d{9})[\dx])\b/i)) {
+        match = keyword.match(RE_ISBN);
+      if (match) {
         method = 'isbn';
         keyword = match[1];
       }
@@ -159,4 +184,6 @@ if (localStorage.showContextMenu === "true") {
       });
     }
   });
+
+  Config.set('contextMenuId', menuId);
 }
