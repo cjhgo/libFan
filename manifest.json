@@ -3,22 +3,22 @@
   "version": "2.0.0",
   "manifest_version": 2,
   "description": "汇文OPAC系统第三方便捷扩展",
-  "content_scripts": [ {
-      "css": [ "css/inject.css" ],
-      "js": [ "js/jquery-2.1.0.min.js" , "js/inject.js" ],
-      "matches": [
-          "http://book.douban.com/subject/*",
-          "http://www.amazon.cn/*",
-          "http://www.amazon.com/*",
-          "http://product.dangdang.com/*", 
-          "http://item.jd.com/*",
-          "http://*/reader/*"
-      ],
-      "run_at": "document_end"
-   } ],
+  "content_scripts": [{
+    "css": ["css/inject.css"],
+    "js": ["js/vendor/jquery-2.1.0.min.js", "js/inject.js", "js/util.js"],
+    "matches": [
+      "http://book.douban.com/subject/*",
+      "http://www.amazon.cn/*",
+      "http://www.amazon.com/*",
+      "http://product.dangdang.com/*",
+      "http://item.jd.com/*",
+      "http://*/reader/*"
+    ],
+    "run_at": "document_end"
+  }],
   "options_page": "options.html",
   "background": {
-    "scripts": [ "js/jquery-2.1.0.min.js", "js/lib.js" , "js/background.js"],
+    "scripts": ["js/vendor/jquery-2.1.0.min.js", "js/lib.js", "js/background.js", "js/util.js"],
     "persistent": true
   },
   "browser_action": {
@@ -38,5 +38,11 @@
     "notifications",
     "contextMenus"
   ],
-  "web_accessible_resources": [ "css/inject.css" , "js/lib.js", "icon.png", "css/loading.gif"]
+  "web_accessible_resources": [
+    "css/inject.css",
+    "css/loading.gif",
+    "icon.png",
+    "js/lib.js",
+    "inject-templates.html"
+  ]
 }
