@@ -32,7 +32,8 @@
     format: function() {
       var args = arguments;
       return this.replace(/{(\w+)}/g, function(match, key) {
-        return (args.length === 1 ? args[0][key] : args[key]) || match;
+        var lookup = args.length === 1 ? args[0] : args;
+        return key in lookup ? lookup[key] : match;
       });
     },
     /**
@@ -40,10 +41,39 @@
      * @return {String} camelcase
      */
     camel: function() {
-      return this.replace(/\b+\w/g, function(match) {
+      return this.replace(/\b[^\w]\b\w/g, function(match, index) {
         return match[match.length - 1].toUpperCase();
-      })
+      });
+    },
+    /**
+     * determine whether or not a string begins with another string
+     * @param  {Integer} position     Optional. The position 
+     *                                in this string at which to begin searching for searchString; 
+     *                                defaults to 0.
+     * @return {Boolean} 
+     */
+    startsWith: function(searchString, position) {
+      position = position || 0;
+      return this.lastIndexOf(searchString, position) === position;
+    },
+
+    /**
+     * determine whether or not a string ends with another string
+     * @param  {String} searchString The characters to be searched for at the end of this string.
+     * @param  {Integer} position     Optional. The position 
+     *                                in this string at which to begin searching for searchString; 
+     *                                defaults to 0.
+     * @return {Boolean}              result
+     */
+    endsWith: function(searchString, position) {
+      if (position === undefined || position > this.length) {
+        position = this.length;
+      }
+      position -= searchString.length;
+      var lastIndex = this.indexOf(searchString, position);
+      return lastIndex > -1 && lastIndex === position;
     }
+
   }
 
   // export
