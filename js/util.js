@@ -33,7 +33,7 @@
       var args = arguments;
       return this.replace(/{(\w+)}/g, function(match, key) {
         var lookup = args.length === 1 ? args[0] : args;
-        return key in lookup ? lookup[key] : match;
+        return lookup.hasOwnProperty(key) ? lookup[key] : match;
       });
     },
     /**
