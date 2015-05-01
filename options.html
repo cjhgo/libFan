@@ -1,55 +1,84 @@
 ﻿<!doctype html>
-<html><head><title>书迷：程序设定</title>
-<meta http-equiv="Content-Type" content="text/HTML; charset=utf-8">
-<link rel="stylesheet" type="text/css" href="css/theme.css">
-<script src="js/jquery-2.1.0.min.js"></script><script src="js/options.js"></script></head><body class="panel">
+<html>
 
-<header>
-  <div id="logo"><a id="logo-animator" href="http://github.com/chichou/libfan"></a></div>
-	<nav class="tab">
-		<a href="options.html" class="on">系统设置</a>
-		<a href="help.html">帮助</a>
-	</nav>
-</header>
+<head>
+  <title>书迷：程序设定</title>
+  <meta http-equiv="Content-Type" content="text/HTML; charset=utf-8">
+  <link rel="stylesheet" type="text/css" href="css/theme.css">
+  <script src="js/vendor/jquery-2.1.0.min.js"></script>
+  <script src="js/options.js"></script>
+</head>
 
-<article class="options">
-  <section class="title-bar">
-    <div class="toolbar"><span id="successful-saved">设置成功保存。</span><button id="save"><em class="icon icon-ok"></em>保存设置</button><button id="close"><em class="icon icon-remove"></em>关闭</button></div>
-    <h1>系统设置</h1>    
-  </section>
-
-  <section>
-    <h2><a name="interface"></a>界面</h2>
-    <p><input type="checkbox" id="show-top-search"><label for="show-top-search">在首页显示热门关键词</label></p>
-    <p><input type="checkbox" id="show-context-menu"><label for="show-context-menu">使用右键快捷搜索菜单（*重启浏览器后生效）</label></p>
-  </section>
-  <section>
-    <h2><a name="search"></a>搜索</h2>
-    <p><label for="page-limit">检索结果数：</label><input type="number" id="page-limit" value="10" min="5" max="20"></p>
-  </section>
-  <section>
-    <h2><a name="notify"></a>还书提醒</h2>
-    <p><input type="checkbox" id="enable-notify"><label for="enable-notify">每次启动 Chrome 时检查到期图书</label></p>
-    <p style="display:none" id="message-authed">您已经登陆了<span id="user-name" class="bold">用户名</span>的帐号。
-      <button id="reauth"><em class="icon icon-user"></em>更改帐号</button>
-      <button id="logoff"><em class="icon icon-remove-circle"></em>删除帐号</button></p>
-    <p style="display:none" id="message-guest">您还没有验证帐号，请
-      <button id="auth"><em class="icon icon-user"></em>登录</button><input id="user-id" type="hidden"></p>
-  </section>
-  <section>
-    <h2><a name="opac"></a>图书馆</h2>
-    <p><label for="opac-root">图书馆系统地址：</label></p>
-    <p><input id="opac-root" placeholder=""></input></p>
-    <p id="opac-selections">
-    <a href="http://calis2.nju.edu.cn:8080/">南京大学</a>
-    <a href="http://huiwen.ujs.edu.cn:8080/">江苏大学</a>    
-    <a href="http://211.70.72.102:8080/">江苏科技大学</a>    
-    <a href="http://opac.lib.xjtlu.edu.cn/cn/">西交利物浦</a>    
-    <a href="http://ilib.ciir.edu.cn/">中国劳动关系学院</a>
-    <a href="http://210.35.206.99:8080/">江西财经大学</a>
-    <!-- <a href="http://202.119.83.14:8080/">南京理工大学</a> TODO：此OPAC版本为5，在匹配的规则上有少许变化-->
-  </p></section>
-</article>
-
+<body class="panel">
+  <header>
+    <div id="logo">
+      <a id="logo-animator" href="http://github.com/chichou/libfan"></a>
+    </div>
+    <nav class="tab">
+      <a href="options.html" class="on">系统设置</a>
+      <a href="help.html">帮助</a>
+    </nav>
+  </header>
+  <article class="options">
+    <section class="title-bar">
+      <div class="toolbar"><span id="successful-saved">设置成功保存。</span>
+        <button id="save"><em class="icon icon-ok"></em>保存设置</button>
+        <button id="close"><em class="icon icon-remove"></em>关闭</button>
+      </div>
+      <h1>系统设置</h1>
+    </section>
+    <section>
+      <h2><a name="interface"></a>界面</h2>
+      <p>
+        <input type="checkbox" id="show-top-search">
+        <label for="show-top-search">在首页显示热门关键词</label>
+      </p>
+      <p>
+        <input type="checkbox" id="show-context-menu">
+        <label for="show-context-menu">使用右键快捷搜索菜单（*重启浏览器后生效）</label>
+      </p>
+    </section>
+    <section>
+      <h2><a name="search"></a>搜索</h2>
+      <p>
+        <label for="page-limit">检索结果数：</label>
+        <input type="number" id="page-limit" value="10" min="5" max="20">
+      </p>
+    </section>
+    <section>
+      <h2><a name="notify"></a>还书提醒</h2>
+      <p>
+        <input type="checkbox" id="enable-notify">
+        <label for="enable-notify">每次启动 Chrome 时检查到期图书</label>
+      </p>
+      <p style="display:none" id="message-authed">您已经登陆了<span id="user-name" class="bold">用户名</span>的帐号。
+        <button id="reauth"><em class="icon icon-user"></em>更改帐号</button>
+        <button id="logoff"><em class="icon icon-remove-circle"></em>删除帐号</button>
+      </p>
+      <p style="display:none" id="message-guest">您还没有验证帐号，请
+        <button id="auth"><em class="icon icon-user"></em>登录</button>
+        <input id="user-id" type="hidden">
+      </p>
+    </section>
+    <section>
+      <h2><a name="opac"></a>图书馆</h2>
+      <p>
+        <label for="opac-root">图书馆系统地址：</label>
+      </p>
+      <p>
+        <input id="opac-root" placeholder=""></input>
+      </p>
+      <p id="opac-selections">
+        <a href="http://calis2.nju.edu.cn:8080/">南京大学</a>
+        <a href="http://huiwen.ujs.edu.cn:8080/">江苏大学</a>
+        <a href="http://211.70.72.102:8080/">江苏科技大学</a>
+        <a href="http://opac.lib.xjtlu.edu.cn/cn/">西交利物浦</a>
+        <a href="http://ilib.ciir.edu.cn/">中国劳动关系学院</a>
+        <a href="http://210.35.206.99:8080/">江西财经大学</a>
+        <!-- <a href="http://202.119.83.14:8080/">南京理工大学</a> TODO：此OPAC版本为5，在匹配的规则上有少许变化-->
+      </p>
+    </section>
+  </article>
 </body>
+
 </html>
