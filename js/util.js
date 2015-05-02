@@ -32,7 +32,8 @@
     format: function() {
       var args = arguments;
       return this.replace(/{(\w+)}/g, function(match, key) {
-        var lookup = args.length === 1 ? args[0] : args;
+        var lookup = args.length === 1 && typeof args[0] === 'object' ? args[0] : args;
+        if (!lookup) console.log(args, arguments);
         return lookup.hasOwnProperty(key) ? lookup[key] : match;
       });
     },

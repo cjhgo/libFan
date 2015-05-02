@@ -40,8 +40,9 @@
    * @return {Promise} 
    */
   Huiwen.prototype.topKeywords = function() {
+    var baseUrl = this.baseUrl;
     return new Promise(function(resolve, reject) {
-      var url = '{0}ajax_topten.php'.format(this.baseUrl);
+      var url = '{0}opac/ajax_topten.php'.format(baseUrl);
       $.get(url).fail(reject).success(function(response) {
         var TAG_OPEN = "')\">", TAG_CLOSE = "</a>";
         var pos = response.indexOf(TAG_OPEN);
@@ -52,7 +53,6 @@
           result.push(response.substring(a, b));
           pos = response.indexOf(TAG_OPEN, b);
         }
-
         resolve(result);
       });
     });
@@ -222,9 +222,7 @@
                 type: $li.find('h3 > span').text(),
                 link: '{0}opac/{1}'.format(baseUrl, $li.find('h3 > a').attr('href'))
               }
-
             }
-
           }).get();
 
           resolve({
