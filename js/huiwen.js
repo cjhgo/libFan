@@ -43,8 +43,7 @@
     return new Promise(function(resolve, reject) {
       var url = '{0}ajax_topten.php'.format(this.baseUrl);
       $.get(url).fail(reject).success(function(response) {
-        var TAG_OPEN = "')\">",
-          TAG_CLOSE = "</a>";
+        var TAG_OPEN = "')\">", TAG_CLOSE = "</a>";
         var pos = response.indexOf(TAG_OPEN);
         var result = [];
         while (pos > -1) {
@@ -120,7 +119,7 @@
       isbn = isbn.replace(/-/g, '');
       search(isbn, function(book) {
         $.get(book.link).fail(reject).success(function(data) {
-          var $dom = $(data.replace(REGEX_SRC, ''));
+          var $dom = $(data.replace(REGEX_SRC, '').replace(/src=/g, 'nosrc='));
           var $table = $dom.find('table').removeAttr('width');
           // todo: serialize
           resolve($.extend(book, {table: $table.get(0)}));
@@ -195,8 +194,6 @@
 
       });
     } else if (this.ver === '5.0') {
-      // todo:
-
       return new Promise(function(resolve, reject) {
         var url = '{0}opac/openlink.php?strSearchType={1}&strText={2}&displaypg={3}&page={4}'
           .format(baseUrl, field, keyword, limit, page);
