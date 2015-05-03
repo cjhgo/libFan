@@ -1,14 +1,18 @@
-<div id="root">
+<!DOCTYPE html>
+<html>
+
+<head></head>
+
+<body id="root">
   <!-- 登录后的提示 -->
   <div id="login-tip">
     <p style='margin-bottom:10px;color:#882828'>登录成功后，单击页面下方的“开启到期提醒” ，
       <br>可以在书迷插件里获取还书通知。</p>
   </div>
   <!--  -->
-  <div id="not-found">
-    <p>哎呀，没有找到这本书……
-      <a href="{base}openlink.php?strSearchType=title&amp;strText={title}" target="_blank">搜搜类似的书</a>
-    </p>
+  <div id="book-not-found">
+    <p>哎呀，没有找到这本书…… <a href="{base}opac/openlink.php?strSearchType=title&amp;strText={title}">
+      搜类似的书</a></p>
   </div>
   <!--  -->
   <div id="toolbar">
@@ -19,5 +23,18 @@
     </div>
   </div>
   <!--  -->
-  <p><a href="{$url}" target="_blank">到图书馆看看</a></p>
-</div>
+  <div id="book-is-avaliable">
+    <p>{$name}收藏了本书，<a href="{$url}" target="_blank">到图书馆看看</a></p>
+  </div>
+  <!-- -->
+  <div id="inject-toolbar">
+    <div id="Injector-toolbar" style="display:none"><img class="logo" src="{logo}">
+      <a href="#/Injector/subscribe" id="Injector-subscribe" title="在电脑上记住此帐号，每次启动 Chrome 的时候检查到期图书">开启到期提醒</a> |
+      <a href="#/Injector/generate-list" id="Injector-generate-list" title="用书单记录我的学习轨迹">
+      生成我的书单</a>
+      <div id="Injector-message-tip"></div>
+    </div>
+  </div>
+</body>
+
+</html>
