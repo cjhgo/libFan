@@ -1,61 +1,78 @@
 ﻿/* 京东样式表 */
+
 .libfan.jd {
-	border-width: 2px 1px 1px;
-	border-style: solid;
-	border-color: #aaa #ddd #ddd;
-	padding:10px;
+  border-color: #aaa #ddd #ddd;
+  border-style: solid;
+  border-width: 2px 1px 1px;
+  padding: 10px;
 }
 
 .libfan.jd h2 {
-	height: 28px;
-	padding-left: 10px;
-	line-height: 28px;
-	font: 14px/28px \5fae\8f6f\96c5\9ed1;
-	color: #333;
+  color: #333;
+  font: 14px/28px \5fae\8f6f\96c5\9ed1;
+  height: 28px;
+  line-height: 28px;
+  padding-left: 10px;
 }
-.libfan.jd a {color:#BB6E0D;font-size:14px;}
 
-#libfan-detail tr td:nth-child(2), #libfan-detail tr td:nth-child(3), #libfan-detail tr td:nth-child(4) {display:none;}
+.libfan.jd a {
+  color: #BB6E0D;
+  font-size: 14px;
+}
+
+#libfan-detail table[data-ver="4.5"] tr td:nth-child(2),
+#libfan-detail table[data-ver="4.5"] tr td:nth-child(3),
+#libfan-detail table[data-ver="4.5"] tr td:nth-child(4) {
+  display: none;
+}
+
+#libfan-detail table[data-ver="5.0"] tr td:nth-child(2),
+#libfan-detail table[data-ver="5.0"] tr td:nth-child(3) {
+  display: none;
+}
 
 #libfan-toolbar {
-	box-shadow: 0 0 6px rgba(0,0,0,.6);
-	margin-bottom:6px;
-	background: #FAFF88;
-	clear:both;
-	text-align: center;
-	line-height: 24px;
-	padding:5px;
-	position: fixed;
-	bottom: 20px;
-	margin-left:-120px;
-	width:240px;
-	left: 50%;
-	background: rgba(0, 0, 0, .75);
-	border-radius: 4px;
-	color:#666;
-	/*border: 4px solid rgba(20, 20, 20, 0.49);*/
+  /*border: 4px solid rgba(20, 20, 20, 0.49);*/
+  background: #FAFF88;
+  background: rgba(0, 0, 0, .75);
+  border-radius: 4px;
+  bottom: 20px;
+  box-shadow: 0 0 6px rgba(0, 0, 0, .6);
+  clear: both;
+  color: #666;
+  left: 50%;
+  line-height: 24px;
+  margin-bottom: 6px;
+  margin-left: -120px;
+  padding: 5px;
+  position: fixed;
+  text-align: center;
+  width: 240px;
 }
 
 #libfan-toolbar > a {
-	transition: color .2s ease-in;
-	display: inline-block;
-	padding: 5px;
-	font-size: 14px;
-	color: #ccc;
+  color: #ccc;
+  display: inline-block;
+  font-size: 14px;
+  padding: 5px;
+  transition: color .2s ease-in;
 }
 
 #libfan-toolbar > a:hover {
-	color:#fff;
+  color: #fff;
 }
 
 #libfan-toolbar .logo {
-	width:24px; height:24px;
-	position: relative; top: -1px; margin:5px;
-	vertical-align: middle;
+  height: 24px;
+  margin: 5px;
+  position: relative;
+  top: -1px;
+  vertical-align: middle;
+  width: 24px;
 }
 
 #libfan-message-tip {
-	text-align: center;
-	color: #FFF73C;
-	font-size: 14px;
+  color: #FFF73C;
+  font-size: 14px;
+  text-align: center;
 }
