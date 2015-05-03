@@ -32,9 +32,12 @@ describe('Search functionalities', function() {
     sdu.book('7-89494-000-3').then(function(data) {
       expect(data.title).toBe('黑客大曝光:网络安全机密与解决方案');
       expect(data.type).toBe('中文图书');
-      done();
+    }).then(function() {
+      sdu.book('9787560926995').then(null, function() {
+        done();
+      });
     });
-  })
+  });
 
   it('should reject invalid versions', function() {
     expect(function() {

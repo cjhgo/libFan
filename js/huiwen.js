@@ -150,7 +150,7 @@
 
         $.get(url).fail(reject).success(function(html) {
           if (html.contains('本馆没有您检索的图书')) {
-            reject();
+            reject(new Error('Book not found'));
           }
 
           // 消除控制台 404 错误
@@ -177,9 +177,9 @@
                 remain: numbers[1], // 可借复本
                 author: intro[0], // 作者
                 publisher: intro[1].trim(), // 出版社
-                serial: serial[1],
+                serial: serial,
                 type: $div.find('.doc_type_class').text(), // 图书类别
-                link: baseUrl + $div.find('h3 > a').attr('href') // 详情页面链接
+                link: '{0}opac/{1}'.format(baseUrl, $div.find('h3 > a').attr('href')) // 详情页面链接
               };
             }
           }).get();
@@ -199,7 +199,7 @@
           .format(baseUrl, field, keyword, limit, page);
         $.get(url).fail(reject).success(function(html) {
           if (html.contains('本馆没有您检索的图书')) {
-            reject();
+            reject(new Error('Book not found'));
           }
 
           var $dom = $(html.replace(REGEX_SRC, ''));
