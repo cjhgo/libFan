@@ -113,8 +113,8 @@
 
         return {
           isbn: isbn,
-          cover: $('#original-main-image').attr('src'),
-          title: $("#btAsinTitle").text().split(' [')[0]
+          cover: $('img.frontImage').attr('src'),
+          title: $("#productTitle").text().split(' [')[0]
         };
       },
 
@@ -145,8 +145,8 @@
    */
   Injector.prototype.loadTemplates = function(callback) {
     this.templates = {};
-    var context = this;    
-    var templateUrl = chrome.extension.getURL('inject-templates.html');
+    var context = this;
+    var templateUrl = chrome.extension.getURL('templates.html');
     var xhr = new XMLHttpRequest();
     xhr.onload = function() {
       var list = xhr.responseXML.documentElement.getElementsByTagName('div');
@@ -179,7 +179,7 @@
   Injector.prototype.loadAvaliableBook = function() {
     var placeholders = {
       douban: ["#buyinfo", "gray_ad"],
-      amazon: ['#ps-content', "cBoxInner"],
+      amazon: ['#buybox_feature_div', "cBoxInner"],
       dangdang: [".buy_area", "buy_area"],
       jd: ['#out-of-stock', "box_jd"]
     };
@@ -190,14 +190,24 @@
         this.injectStyles();
         var book = this.getBook();
         var templates = this.templates;
-        var huiwen = new Huiwen({baseUrl: 'http://58.194.172.34/', ver: '5.0'});
-        var $frame = $('<div>');
+        var huiwen = new Huiwen({
+          baseUrl: 'http://58.194.172.34/',
+          ver: '5.0',
+          title: '山东大学图书馆'
+        });
+        var $frame = $('<div>').attr('id', 'libfan-detail').addClass(selectors[1]);
         canary.before($frame);
         huiwen.book(book.isbn).then(function(data) {
-          $frame.append(templates.bookIsAvaliable.format(data.link));
+          data.table.setAttribute('data-ver', '5.0');
+          $frame.append(templates.bookIsAvaliable.format({
+            name: huiwen.title,
+            url: data.link
+          }));
           $frame.append(data.table);
         }, function() {
-          $frame.html(templates.bookNotFound.format(book.title));
+          $frame.html(templates.bookNotFound.format({
+            title: book.title
+          }));
         });
       }
     }
@@ -209,7 +219,6 @@
    * @return {[type]} [description]
    */
   Injector.prototype.injectStyles = function() {
-    // inject stylesheet
     var attrs = {
       rel: 'stylesheet',
       type: 'text/css',
@@ -225,6 +234,5 @@
 
   var injector = new Injector();
   injector.run();
-
 
 })();

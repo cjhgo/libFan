@@ -7,7 +7,7 @@
   function Huiwen(opt) {
     this.ver = opt.ver || '4.5';
     this.baseUrl = opt.baseUrl;
-    this.name = opt.name;
+    this.title = opt.title;
 
     if (['4.5', '5.0'].indexOf(this.ver) === -1) {
       throw new Error('Invalid version number, must be 4.5 or 5.0');
@@ -62,16 +62,19 @@
    * fetch RSS contents
    */
   Huiwen.prototype.rss = function(id, type) {
+    if (!Huiwen.RSSType[type]) {
+      throw new Error('Invalid rss type');
+    }
     var context = this;
-    if (this.ver === '4.5') {
+    if (['4.5', '5.0'].indexOf(this.ver) > -1) {
       return new Promise(function(resolve, reject) {
-        var url = '{0}rss.php?id={2}&type={1}'.format(context.baseUrl, id, type);
+        var url = '{0}reader/rss.php?id={1}&type={2}'.format(context.baseUrl, id, type);
         $.ajax({
           dataType: 'xml',
           url: url
         }).fail(reject).success(function(xml) {
           var $dom = $(xml);
-          var title = dom.find("channel > title").text();
+          var title = $dom.find("channel > title").text();
           var tags = ['title', 'link', 'description'];
           var list = $dom.find('item').map(function(i, e) {
             var item = {};
@@ -88,7 +91,7 @@
         })
       });
     }
-  }
+  };
 
   /**
    * 获取特定 ISBN 书籍的馆藏信息
@@ -239,4 +242,4 @@
 
   // export
   window.Huiwen = Huiwen;
-})()
+})();
