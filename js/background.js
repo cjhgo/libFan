@@ -163,18 +163,21 @@ LibService.prototype.message = function(request, sender, sendResponse) {
         for (var key in context.defaults) {
           result[key] = localStorage.getItem(key);
         }
-        return result;
+        sendResponse(result);
       }
     },
     setPref: function() {
       if (request.key in context.defaults) {
         localStorage.setItem(request.key, request.value);
+        sendResponse(true);
       } else {
         throw new Error('Invalid key');
+        sendResponse(false);
       }
     },
     updatePref: function() {
       context.loadPref().refresh();
+      sendResponse();
     }
   }
 
@@ -190,7 +193,6 @@ LibService.prototype.message = function(request, sender, sendResponse) {
 
 // init service
 var service = new LibService();
-service.start();
 
 // event handler
 chrome.runtime.onStartup.addListener(service.start.bind(service));
