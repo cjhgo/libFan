@@ -167,12 +167,18 @@ LibService.prototype.message = function(request, sender, sendResponse) {
       }
     },
     setPref: function() {
-      if (request.key in context.defaults) {
-        localStorage.setItem(request.key, request.value);
-        sendResponse(true);
-      } else {
-        throw new Error('Invalid key');
-        sendResponse(false);
+      if (request.method === 'single') {
+        if (request.key in context.defaults) {
+          localStorage.setItem(request.key, request.value);
+        } else {
+          throw new Error('Invalid key');
+        }
+      } else if (request.method === 'bulk') {
+        for (var key in request.values) {
+          if (key in context.defaults) {
+            localStorage.setItem(key, request.values[key]);
+          }
+        }
       }
     },
     updatePref: function() {
