@@ -44,7 +44,6 @@
     return new Promise(function(resolve, reject) {
       var url = '{0}opac/ajax_topten.php'.format(baseUrl);
       $.get(url).fail(reject).success(function(response) {
-        var TAG_OPEN = "')\">", TAG_CLOSE = "</a>";
         var pos = response.indexOf(TAG_OPEN);
         var result = [];
         while (pos > -1) {
@@ -125,7 +124,6 @@
           var $dom = $(data.replace(REGEX_SRC, '').replace(/src=/g, 'nosrc='));
           var $table = $dom.find('table').removeAttr('width');
           // todo: serialize
-          resolve($.extend(book, {table: $table.get(0)}));
         });
       }, reject);
     });
@@ -242,4 +240,3 @@
 
   // export
   window.Huiwen = Huiwen;
-})();

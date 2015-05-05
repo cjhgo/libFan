@@ -1,3 +1,5 @@
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 100 * 1000;
+
 describe('Search functionalities', function() {
   var ujs = new Huiwen({
     baseUrl: 'huiwen.ujs.edu.cn:8080',
@@ -61,6 +63,22 @@ describe('Search functionalities', function() {
     ujs.rss('5633076452300768556200300736546556665265', 3).then(function(data) {
       expect('title' in data).toBeTruthy();
       expect('list' in data).toBeTruthy();
+      done();
+    });
+  });
+
+  // note: the following test cases requires manually login
+
+  it('should fetch user id', function(done) {
+    ujs.id().then(function(id) {
+      expect(/\w{40}/.test(id)).toBeTruthy();
+      done();
+    });
+  });
+
+  it('should handle book history', function(done) {
+    ujs.history().then(function(data) {
+      expect(+data[0].no).toBe(1);
       done();
     });
   });

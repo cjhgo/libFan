@@ -5,7 +5,7 @@
   "description": "汇文 OPAC 系统第三方便捷扩展",
   "content_scripts": [{
     "css": ["css/inject.css"],
-    "js": ["js/vendor/jquery-2.1.0.min.js", "js/huiwen.js", "js/inject.js", "js/util.js"],
+    "js": ["js/util.js", "js/vendor/jquery-2.1.0.min.js", "js/huiwen.js", "js/inject.js"],
     "matches": [
       "http://book.douban.com/subject/*",
       "http://www.amazon.cn/*",
