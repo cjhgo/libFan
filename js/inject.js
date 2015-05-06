@@ -27,6 +27,7 @@
    */
   Injector.prototype.onload = function() {
     var match = location.host.match(/\.(amazon|douban|dangdang|jd)\./);
+    var context = this;
     if (match) {
       this.domain = match[1];
       this.loadAvaliableBook();
@@ -34,8 +35,10 @@
       chrome.runtime.sendMessage({
         subject: 'getPref'
       }, function(pref) {
-        if (location.href.startsWith(pref.baseUrl)) {
-          this.login();
+        var readerUrl = '{0}reader/'.format(pref.baseUrl);
+        context.baseUrl = pre
+        if (location.href.startsWith(readerUrl)) {
+          context.login();
         }
       });
     }
@@ -55,35 +58,61 @@
       }
     }
 
-    if ($("caption").text().contains("登录")) {
-      $("input[type=submit]").before(this.templates.loginTip);
-    } else if (location.pathname.contains('redr_cust_result.php') &&
-      $("#nav_mylibhome").text().contains('我的首页')) {
+    // login page
+    if (this.ver && location.pathname.endsWith('login.php')) {
+      $('input[type=submit]').before(this.templates.loginTip);
+      return;
+    }
 
-      $('body').append(this.templates.toolbar);
-      $('#Injector-toolbar').fadeIn(200);
-      $('#Injector-subscribe, #Injector-generate-list').on('click', function() {
+    if (location.pathname.startsWith('{0}reader'.format(''))) {
+      // guest or logged in
+      if (this.ver === '4.5') {
+      var menu = document.querySelector('#menu > div');
+      if (menu.querySelector('a').pathname.endsWith('logout.php')) {
+        this.userName = menu.childNodes[2].textContent.trim();
 
-        // todo:
-        var data = {
-          'Injector-subscribe': ['setNotification', '设置成功'],
-          'Injector-generate-list': ['generateList', '正在准备数据，请稍安勿躁…']
-        }[this.id];
-
-        var tip = $("#Injector-message-tip");
-
-        chrome.runtime.sendMessage({
-          method: data[0],
-          uid: $("script:not([src])").html().match(/&id=(\w+)/)[1],
-          userName: $("#menu > div").text().replace(/\s*注销/, "").trim()
-        }, function(response) {
-          var lastError = chrome.runtime.lastError;
-          tip.stop().show().text('发生意外错误：' + lastError.message);
+        $.get('.php').then(function(html) {
+          // todo:
         });
 
-        tip.text(data[1]).fadeIn();
-        setTimeout(tip.fadeOut.bind(tip), 3000);
-      });
+        $('body').append(this.templates.toolbar.format({
+          logo: chrome.extension.getURL('icon.png')
+        }));
+        $('#libfan-toolbar').fadeIn(200);
+        $('#libfan-subscribe').click(function() {
+          // 
+          chrome.runtime.sendMessage({
+            subject: 'setPref',
+            key: 'userName',
+            value: this.userName
+          });
+
+        });
+
+        // todo:
+        $('#libfan-generate-list').click(function() {
+          
+        });
+
+        $('#libfan-subscribe').on('click', function() {
+          
+        });
+
+      }
+
+    } else if (this.ver === '5.0') {
+      var menu = document.querySelector(
+        '#header_opac > .header_right_top > .header_right_font:last-child');
+      if (menu.querySelector('a:last-child').pathname.endsWith('logout.php')) {
+        this.userName = menu.childNodes[4].textContent.trim();
+        // todo:
+        chrome.runtime.sendMessage({
+          subject: 'setPref',
+          key: 'userName',
+          value: 'this.value'
+        });
+      }
+
     }
   };
 

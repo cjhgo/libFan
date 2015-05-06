@@ -1,5 +1,14 @@
 (function() {
-  var REGEX_SRC = /(href|src)=\"(\.\.)?\/tpl\S*?\"/g;
+  /**
+   * build dom tree from html string
+   * @param  {String} html html source code
+   * @return {Object}      jQuery dom object
+   */
+  var dom = function dom(html) {
+    html = html.replace(/<(img|link|\/?script|\/?iframe)[^>]*>/ig, '');
+    return $(html);
+  };
+
   /**
    * Huiwen API
    * @param {String} ver 版本
@@ -44,6 +53,8 @@
     return new Promise(function(resolve, reject) {
       var url = '{0}opac/ajax_topten.php'.format(baseUrl);
       $.get(url).fail(reject).success(function(response) {
+        var TAG_OPEN = "')\">",
+          TAG_CLOSE = "</a>";
         var pos = response.indexOf(TAG_OPEN);
         var result = [];
         while (pos > -1) {
@@ -59,6 +70,7 @@
 
   /**
    * fetch RSS contents
+   * @return {Promise}
    */
   Huiwen.prototype.rss = function(id, type) {
     if (!Huiwen.RSSType[type]) {
@@ -93,6 +105,47 @@
   };
 
   /**
+   * get RSS id
+   * @return {Promise} 
+   */
+  Huiwen.prototype.id = function() {
+    var context = this;
+    return new Promise(function(resolve, reject) {
+      var url = '{0}/reader/redr_cust_result.php'.format(context.baseUrl);
+      $.get(url).fail(reject).success(function(response) {
+        var id = response.match(/id=(\w{40})/);
+        if (id) {
+          resolve(id.pop());
+        } else {
+          reject(new Error('Unexpected response'));
+        }
+      });
+    });
+  };
+
+  /**
+   * read borrow history
+   * @return {Promise}
+   */
+  Huiwen.prototype.history = function() {
+    var context = this;
+    return new Promise(function(resolve, reject) {
+      var url = '{0}/reader/book_hist.php?para_string=all'.format(context.baseUrl);
+      $.get(url).fail(reject).success(function(response) {
+        var list = dom(response).find('tr:gt(0)').map(function() {
+          var row = this.querySelectorAll('td');
+          var result = {};
+          ['no', 'code', 'title', 'author', 'borrow', 'return', 'location'].forEach(function(key, i) {
+            result[key] = row[i].textContent;
+          });
+          return result;
+        });
+        resolve(list);
+      });
+    });
+  };
+
+  /**
    * 获取特定 ISBN 书籍的馆藏信息
    */
   Huiwen.prototype.book = function(isbn) {
@@ -121,9 +174,11 @@
       isbn = isbn.replace(/-/g, '');
       search(isbn, function(book) {
         $.get(book.link).fail(reject).success(function(data) {
-          var $dom = $(data.replace(REGEX_SRC, '').replace(/src=/g, 'nosrc='));
-          var $table = $dom.find('table').removeAttr('width');
+          var $table = dom(data).find('table').removeAttr('width');
           // todo: serialize
+          resolve($.extend(book, {
+            table: $table.get(0)
+          }));
         });
       }, reject);
     });
@@ -155,7 +210,7 @@
           }
 
           // 消除控制台 404 错误
-          var $dom = $(html.replace(REGEX_SRC, ''));
+          var $dom = dom(html);
           var total = $dom.find('#titlenav strong.red').text();
           var list = $dom.find('.list_books').slice(0, limit).map(function() {
             // 馆藏复本、可借复本信息
@@ -203,7 +258,7 @@
             reject(new Error('Book not found'));
           }
 
-          var $dom = $(html.replace(REGEX_SRC, ''));
+          var $dom = dom(html);
           var total = $dom.find('strong.red').text();
           var list = $dom.find('#search_book_list > li').slice(0, limit).map(function() {
             var $li = $(this);
@@ -240,3 +295,4 @@
 
   // export
   window.Huiwen = Huiwen;
+})();

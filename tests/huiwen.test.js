@@ -1,5 +1,3 @@
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 100 * 1000;
-
 describe('Search functionalities', function() {
   var ujs = new Huiwen({
     baseUrl: 'huiwen.ujs.edu.cn:8080',
@@ -73,6 +71,9 @@ describe('Search functionalities', function() {
     ujs.id().then(function(id) {
       expect(/\w{40}/.test(id)).toBeTruthy();
       done();
+    }, function() {
+      done();
+      throw new Error('Unexpected response. Have you logged in?');
     });
   });
 
@@ -80,6 +81,9 @@ describe('Search functionalities', function() {
     ujs.history().then(function(data) {
       expect(+data[0].no).toBe(1);
       done();
+    }, function() {
+      done();
+      throw new Error('Unexpected response. Have you logged in?');
     });
   });
 

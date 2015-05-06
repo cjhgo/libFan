@@ -15,25 +15,17 @@
       搜类似的书</a></p>
   </div>
   <!--  -->
-  <div id="toolbar">
-    <div id="libfan-toolbar" style="display:none">
-      <img class="logo" src="{icon}">
-      <a href="#/libfan/subscribe" id="libfan-subscribe" title="在电脑上记住此帐号，每次启动Chrome的时候检查到期图书">开启到期提醒</a> | <a href="#/libfan/generate-list" id="libfan-generate-list" title="用书单记录我的学习轨迹">生成我的书单</a>
-      <div id="libfan-message-tip"></div>
-    </div>
-  </div>
-  <!--  -->
   <div id="book-is-avaliable">
     <h3>馆藏信息</h3>
     <p>{name}收藏了本书，<a href="{url}" target="_blank">到图书馆看看</a></p>
   </div>
   <!-- -->
-  <div id="inject-toolbar">
-    <div id="Injector-toolbar" style="display:none"><img class="logo" src="{logo}">
-      <a href="#/Injector/subscribe" id="Injector-subscribe" title="在电脑上记住此帐号，每次启动 Chrome 的时候检查到期图书">开启到期提醒</a> |
-      <a href="#/Injector/generate-list" id="Injector-generate-list" title="用书单记录我的学习轨迹">
+  <div id="toolbar" class="libfan-inject">
+    <div id="libfan-toolbar" class="libfan-toolbar" style="display:none"><img class="logo" src="{logo}">
+      <a href="#/libfan/subscribe" id="libfan-subscribe" title="在电脑上记住此帐号，每次启动 Chrome 的时候检查到期图书">开启到期提醒</a> |
+      <a href="#/libfan/generate-list" id="libfan-generate-list" title="用书单记录我的学习轨迹">
       生成我的书单</a>
-      <div id="Injector-message-tip"></div>
+      <div id="libfan-tip" class="libfan-message"></div>
     </div>
   </div>
 </body>
