@@ -17,7 +17,9 @@
    * @return {Injector} this
    */
   Injector.prototype.run = function() {
-    this.loadTemplates(this.onload.bind(this));
+    this.loadTemplates()
+      .then(this.loadPref.bind(this))
+      .then(this.onload.bind(this));
     return this;
   };
 
@@ -26,21 +28,20 @@
    * @return {Null}
    */
   Injector.prototype.onload = function() {
-    var match = location.host.match(/\.(amazon|douban|dangdang|jd)\./);
-    var context = this;
-    if (match) {
-      this.domain = match[1];
-      this.loadAvaliableBook();
+    var pref = this.pref;
+    this.huiwen = new Huiwen({
+      ver: pref.ver,
+      baseUrl: pref.baseUrl,
+      title: pref.title
+    });
+    if (location.href.startsWith(this.huiwen.prefixes.reader)) {
+      this.login();
     } else {
-      chrome.runtime.sendMessage({
-        subject: 'getPref'
-      }, function(pref) {
-        var readerUrl = '{0}reader/'.format(pref.baseUrl);
-        context.baseUrl = pre
-        if (location.href.startsWith(readerUrl)) {
-          context.login();
-        }
-      });
+      var match = location.host.match(/\.(amazon|douban|dangdang|jd)\./);
+      if (match) {
+        this.domain = match[1];
+        this.loadAvaliableBook();
+      } 
     }
   }
 
@@ -49,6 +50,7 @@
    * 
    */
   Injector.prototype.login = function() {
+    var pref = this.pref;
     var element = document.getElementById('copy');
     if (element) {
       var copyright = element.textContent;
@@ -64,55 +66,42 @@
       return;
     }
 
-    if (location.pathname.startsWith('{0}reader'.format(''))) {
+    if (location.pathname.startsWith(this.huiwen.prefixes.reader)) {
       // guest or logged in
       if (this.ver === '4.5') {
-      var menu = document.querySelector('#menu > div');
-      if (menu.querySelector('a').pathname.endsWith('logout.php')) {
-        this.userName = menu.childNodes[2].textContent.trim();
+        var menu = document.querySelector('#menu > div');
+        if (menu.querySelector('a').pathname.endsWith('logout.php')) {
+          this.userName = menu.childNodes[2].textContent.trim();
 
-        $.get('.php').then(function(html) {
-          // todo:
-        });
+          $('body').append(this.templates.toolbar.format({
+            logo: chrome.extension.getURL('icon.png')
+          }));
 
-        $('body').append(this.templates.toolbar.format({
-          logo: chrome.extension.getURL('icon.png')
-        }));
-        $('#libfan-toolbar').fadeIn(200);
-        $('#libfan-subscribe').click(function() {
-          // 
-          chrome.runtime.sendMessage({
-            subject: 'setPref',
-            key: 'userName',
-            value: this.userName
+          $('#libfan-toolbar').fadeIn(200);
+          $('#libfan-subscribe').click(function() {
+            // 
+            chrome.runtime.sendMessage({
+              subject: 'subscribe',
+              name: this.userName
+            });
+
           });
 
-        });
+          // todo:
+          $('#libfan-generate-list').click(function() {
 
-        // todo:
-        $('#libfan-generate-list').click(function() {
-          
-        });
+          });
+        }
 
-        $('#libfan-subscribe').on('click', function() {
-          
-        });
+      } else if (this.ver === '5.0') {
+        var menu = document.querySelector(
+          '#header_opac > .header_right_top > .header_right_font:last-child');
+        if (menu.querySelector('a:last-child').pathname.endsWith('logout.php')) {
+          this.userName = menu.childNodes[4].textContent.trim();
+          // todo:
+        }
 
       }
-
-    } else if (this.ver === '5.0') {
-      var menu = document.querySelector(
-        '#header_opac > .header_right_top > .header_right_font:last-child');
-      if (menu.querySelector('a:last-child').pathname.endsWith('logout.php')) {
-        this.userName = menu.childNodes[4].textContent.trim();
-        // todo:
-        chrome.runtime.sendMessage({
-          subject: 'setPref',
-          key: 'userName',
-          value: 'this.value'
-        });
-      }
-
     }
   };
 
@@ -149,7 +138,7 @@
 
       dangdang: function() {
         return {
-          isbn: $(".ws4").parent().html().substring(27),
+          isbn: $('.ws4').parent().html().substring(27),
           cover: $('#largePic').attr('src'),
           title: $('h1').text()
         };
@@ -157,9 +146,9 @@
 
       jd: function() {
         return {
-          isbn: $("#summary-isbn .dd").html() || "",
-          cover: $(".bigimg").attr('src'),
-          title: $("h1").text().match(/\S+/)[0]
+          isbn: $('.p-parameter-list > li:nth-of-type(2)').attr('title'),
+          cover: $('[jqimg]').attr('src'),
+          title: $('h1').text()
         }
       }
     };
@@ -172,35 +161,47 @@
    * load html templates
    * @return {Promise} 
    */
-  Injector.prototype.loadTemplates = function(callback) {
-    this.templates = {};
+  Injector.prototype.loadTemplates = function() {
     var context = this;
-    var templateUrl = chrome.extension.getURL('templates.html');
-    var xhr = new XMLHttpRequest();
-    xhr.onload = function() {
-      var list = xhr.responseXML.documentElement.getElementsByTagName('div');
-      [].forEach.call(list, function(e) {
-        context.templates[e.id.camel()] = e.innerHTML;
-      });
-      callback();
-    }
-    xhr.onerror = function() {
-      throw new Error('Error while loading templates');
-    }
-    xhr.open('GET', templateUrl);
-    xhr.responseType = 'document';
-    xhr.send();
+
+    this.templates = {};
+    return new Promise(function(resolve, reject) {
+      var templateUrl = chrome.extension.getURL('templates.html');
+      var xhr = new XMLHttpRequest();
+      xhr.onload = function() {
+        var list = xhr.responseXML.documentElement.getElementsByTagName('div');
+        [].forEach.call(list, function(e) {
+          context.templates[e.id.camel()] = e.innerHTML;
+        });
+        resolve();
+      }
+      xhr.onerror = reject;
+      xhr.open('GET', templateUrl);
+      xhr.responseType = 'document';
+      xhr.send();
+    });
+
   };
 
   /**
-   * render templates
-   * @param  {String} key   template's key
-   * @param  {Object} param params to bind
-   * @return {String}       rendered html
+   * laod preferences
+   * @return {Promise}
    */
-  Injector.prototype.render = function(key, param) {
-    // todo: 
-  }
+  Injector.prototype.loadPref = function() {
+    var context = this;
+    return new Promise(function(resolve, reject) {
+      chrome.runtime.sendMessage({
+        subject: 'getPref'
+      }, function(pref) {
+        if (!pref) {
+          reject(runtime.lastError);
+        } else {
+          context.pref = pref;
+          resolve();
+        }
+      });
+    });
+  };
 
   /**
    * find avaliable book in library
@@ -212,6 +213,7 @@
       dangdang: [".buy_area", "buy_area"],
       jd: ['#out-of-stock', "box_jd"]
     };
+    var context = this;
     var selectors = placeholders[this.domain];
     if (selectors) {
       var canary = $(selectors[0]);
@@ -219,17 +221,12 @@
         this.injectStyles();
         var book = this.getBook();
         var templates = this.templates;
-        var huiwen = new Huiwen({
-          baseUrl: 'http://58.194.172.34/',
-          ver: '5.0',
-          title: '山东大学图书馆'
-        });
         var $frame = $('<div>').attr('id', 'libfan-detail').addClass(selectors[1]);
         canary.before($frame);
-        huiwen.book(book.isbn).then(function(data) {
+        this.huiwen.book(book.isbn).then(function(data) {
           data.table.setAttribute('data-ver', '5.0');
           $frame.append(templates.bookIsAvaliable.format({
-            name: huiwen.title,
+            name: context.huiwen.title,
             url: data.link
           }));
           $frame.append(data.table);

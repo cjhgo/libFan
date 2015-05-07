@@ -29,6 +29,12 @@
     if (!this.baseUrl.endsWith('/')) {
       this.baseUrl += '/';
     }
+
+    var context = this;
+    context.prefixes = {};
+    ['reader', 'opac'].forEach(function(prefix) {
+      context.prefixes[prefix] = context.baseUrl + prefix;
+    });
   };
 
   /**
@@ -175,7 +181,6 @@
       search(isbn, function(book) {
         $.get(book.link).fail(reject).success(function(data) {
           var $table = dom(data).find('table').removeAttr('width');
-          // todo: serialize
           resolve($.extend(book, {
             table: $table.get(0)
           }));
