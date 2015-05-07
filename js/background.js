@@ -56,7 +56,6 @@ LibService.prototype.refresh = function() {
     }).join('\n和');
     var message = '您有{0}'.format(detail);
     var showNotification = function(text) {
-      // 弹出消息
       var notification = new Notification('书迷提醒', {
         icon: 'images/32x32.png',
         body: text
@@ -69,7 +68,6 @@ LibService.prototype.refresh = function() {
       showNotification(message);
     } else if (Notification.permission !== 'denied') {
       Notification.requestPermission(function(permission) {
-        // If the user is okay, let's create a notification
         if (permission === 'granted') {
           showNotification(message);
         }
@@ -153,43 +151,57 @@ LibService.prototype.install = function() {
  * @return {Null}
  */
 LibService.prototype.message = function(request, sender, sendResponse) {
-  var context = this;
+  var huiwen = this.client;
   var handlers = {
-    getPref: function() {
-      if (request.key) {
-        sendResponse(localStorage.getItem(request.key));
-      } else {
-        var result = {};
-        for (var key in context.defaults) {
-          result[key] = localStorage.getItem(key);
-        }
-        sendResponse(result);
-      }
+    /**
+     * search a book by isbn
+     * @return {Null}
+     */
+    book: function() {
+      huiwen.book(request.isbn).then(function(data) {
+        sendResponse({
+          found: true,
+          ver: huiwen.ver
+          title: huiwen.title,
+          book: data
+        });
+      }).catch(function() {
+        sendResponse({
+          title: huiwen.title,
+          found: false
+        });
+      });
     },
-    setPref: function() {
-      if (request.method === 'single') {
-        if (request.key in context.defaults) {
-          localStorage.setItem(request.key, request.value);
-        } else {
-          throw new Error('Invalid key');
-        }
-      } else if (request.method === 'bulk') {
-        for (var key in request.values) {
-          if (key in context.defaults) {
-            localStorage.setItem(key, request.values[key]);
-          }
-        }
-      }
+
+    /**
+     * load url prefixes
+     * @return {Null}
+     */
+    getPrefixes: function() {
+      sendResponse(huiwen.prefixes);
     },
-    updatePref: function() {
-      context.loadPref().refresh();
-      sendResponse();
+
+    /**
+     * subscribe notifications
+     * @return {Null}
+     */
+    subscribe: function() {
+      localStorage.setItem(userName, request.name);
+      sendResponse(true);
+    },
+
+    /**
+     * unsubscribe notifications
+     * @return {Null}
+     */
+    unsubscribe: function() {
+      sendResponse(true);
     }
-  }
+  };
 
   if (handlers.hasOwnProperty(request.subject)) {
     var action = handlers[request.subject];
-    action();
+    action.call();
   } else {
     console.log('Unknown message', request, sender);
     throw new Error('unhandled message');

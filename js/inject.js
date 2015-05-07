@@ -28,20 +28,14 @@
    * @return {Null}
    */
   Injector.prototype.onload = function() {
-    var pref = this.pref;
-    this.huiwen = new Huiwen({
-      ver: pref.ver,
-      baseUrl: pref.baseUrl,
-      title: pref.title
-    });
-    if (location.href.startsWith(this.huiwen.prefixes.reader)) {
+    if (location.href.startsWith(this.prefixes.reader)) {
       this.login();
     } else {
       var match = location.host.match(/\.(amazon|douban|dangdang|jd)\./);
       if (match) {
         this.domain = match[1];
         this.loadAvaliableBook();
-      } 
+      }
     }
   }
 
@@ -50,7 +44,6 @@
    * 
    */
   Injector.prototype.login = function() {
-    var pref = this.pref;
     var element = document.getElementById('copy');
     if (element) {
       var copyright = element.textContent;
@@ -66,30 +59,26 @@
       return;
     }
 
-    if (location.pathname.startsWith(this.huiwen.prefixes.reader)) {
+    if (location.href.startsWith(this.prefixes.reader)) {
       // guest or logged in
       if (this.ver === '4.5') {
         var menu = document.querySelector('#menu > div');
         if (menu.querySelector('a').pathname.endsWith('logout.php')) {
-          this.userName = menu.childNodes[2].textContent.trim();
-
+          var userName = menu.childNodes[2].textContent.trim();
           $('body').append(this.templates.toolbar.format({
             logo: chrome.extension.getURL('icon.png')
           }));
-
           $('#libfan-toolbar').fadeIn(200);
           $('#libfan-subscribe').click(function() {
-            // 
             chrome.runtime.sendMessage({
               subject: 'subscribe',
-              name: this.userName
+              name: userName
             });
-
           });
-
-          // todo:
           $('#libfan-generate-list').click(function() {
-
+            chrome.runtime.sendMessage({
+              subject: 'generate'
+            })
           });
         }
 
@@ -184,19 +173,19 @@
   };
 
   /**
-   * laod preferences
+   * load url prefixes
    * @return {Promise}
    */
-  Injector.prototype.loadPref = function() {
+  Injector.prototype.getPrefixes = function() {
     var context = this;
     return new Promise(function(resolve, reject) {
       chrome.runtime.sendMessage({
-        subject: 'getPref'
-      }, function(pref) {
+        subject: 'getPrefixes'
+      }, function(prefixes) {
         if (!pref) {
           reject(runtime.lastError);
         } else {
-          context.pref = pref;
+          context.prefixes = prefixes;
           resolve();
         }
       });
@@ -223,17 +212,24 @@
         var templates = this.templates;
         var $frame = $('<div>').attr('id', 'libfan-detail').addClass(selectors[1]);
         canary.before($frame);
-        this.huiwen.book(book.isbn).then(function(data) {
-          data.table.setAttribute('data-ver', '5.0');
-          $frame.append(templates.bookIsAvaliable.format({
-            name: context.huiwen.title,
-            url: data.link
-          }));
-          $frame.append(data.table);
-        }, function() {
-          $frame.html(templates.bookNotFound.format({
-            title: book.title
-          }));
+
+        chrome.runtime.sendMessage({
+          subject: 'book',
+          isbn: book.isbn
+        }, function(response) {
+          if (response && response.found) {
+            response.book.table.setAttribute('data-ver', response.ver);
+            $frame
+              .append(templates.bookIsAvaliable.format({
+                name: response.title,
+                url: response.book.link
+              }))
+              .append(response.book.table);
+          } else {
+            $frame.html(templates.bookNotFound.format({
+              title: response.title
+            }));
+          }
         });
       }
     }
