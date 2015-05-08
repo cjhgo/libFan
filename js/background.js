@@ -44,7 +44,7 @@ LibService.prototype.refresh = function() {
   });
 
   return Promise.all(tasks).then(function(results) {
-    localStorage.notifications = results;
+    localStorage.notifications = JSON.stringify(results);
     var detail = results.map(function(item) {
       if (item.list.length > 0) {
         var header = ' {0} 本 {1}：'.format(item.list.length, item.title);
