@@ -186,8 +186,15 @@ LibService.prototype.message = function(request, sender, sendResponse) {
      * @return {Null}
      */
     subscribe: function() {
-      localStorage.setItem(userName, request.name);
-      sendResponse(true);
+      localStorage.setItem('userName', request.name);
+      localStorage.setItem('notification', 'enabled');
+      localStorage.setItem('notificationList', '4,5');
+      huiwen.id().then(function(id) {
+        localStorage.setItem('userId', id);
+        sendResponse(true);
+      }).except(function () {
+        sendResponse(false);
+      });
     },
 
     /**
@@ -195,6 +202,9 @@ LibService.prototype.message = function(request, sender, sendResponse) {
      * @return {Null}
      */
     unsubscribe: function() {
+      localStorage.setItem('userName', '未登录');
+      localStorage.setItem('notification', 'disabled');
+      localStorage.setItem('userId', '0');
       sendResponse(true);
     }
   };
