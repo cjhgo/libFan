@@ -188,7 +188,7 @@ LibService.prototype.message = function(request, sender, sendResponse) {
     subscribe: function() {
       localStorage.setItem('userName', request.name);
       localStorage.setItem('notification', 'enabled');
-      localStorage.setItem('notificationList', '4,5');
+      localStorage.setItem('notificationList', request.notificationList || '4,5');
       huiwen.id().then(function(id) {
         localStorage.setItem('userId', id);
         sendResponse(true);

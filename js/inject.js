@@ -1,13 +1,4 @@
-﻿/*
-  Chrome Extention for Huiwen OPAC
-
-  Copyright (c) 2013-2014 ChiChou
-  This software may be freely distributed under the MIT license.
-
-  http://chichou.0ginr.com
-*/
-
-(function() {
+﻿(function() {
   'use strict';
 
   var Injector = function Injector() {};
